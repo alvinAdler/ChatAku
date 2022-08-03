@@ -1,0 +1,49 @@
+:root {
+	--color-light: #fafafa;
+	--color-dark: #2b2b2b;
+	--color-less: #ced4da;
+
+	--color-primary: #dfecf5;
+	--color-sub: #85acd3;
+	--color-accent: #356cb1;
+	--color-text: var(--color-dark);
+
+	--fs-h2: 1.5rem;
+	--fs-small: 0.8rem;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	font-family: "Quicksand", sans-serif;
+	min-height: 100vh;
+	width: 100%;
+}
+
+#root,
+.app {
+	min-height: 100vh;
+}
+
+/* #root {
+	border: 3px solid red;
+}
+
+.app {
+	border: 3px solid blue;
+}
+
+body {
+	border: 3px solid yellow;
+}
+
+html {
+	border: 3px solid green;
+} */
