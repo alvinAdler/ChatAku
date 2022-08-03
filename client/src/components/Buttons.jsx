@@ -11,8 +11,9 @@ const DefaultButton = styled.button`
     border: none;
     transition: 150ms all ease-in;
 
-    &:hover{
+    &:hover, &:active, &:focus{
         background-color: var(--color-sub);
+        outline: 3px solid var(--color-accent);
     }
 `
 

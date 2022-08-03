@@ -5,7 +5,7 @@ const FormInput = styled.input`
 	display: inline-block;
 	background-color: var(--color-light);
 	border: 2px solid var(--color-less);
-	padding: 0.5rem;
+	padding: 0.8rem;
 	border-radius: 5px;
 	outline: none;
 	transition: 150ms border ease-in;
