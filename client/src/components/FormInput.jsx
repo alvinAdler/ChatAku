@@ -20,7 +20,6 @@ const StyledLabeledFormInput = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	border: 2px solid blue;
 
 	label {
 		cursor: text;
@@ -32,11 +31,11 @@ const StyledLabeledFormInput = styled.div`
 	}
 `
 
-const LabeledFormInput = ({ label, ...rest }) => {
+const LabeledFormInput = ({ label, id, ...rest }) => {
 	const currentId = useId()
 
 	return (
-		<StyledLabeledFormInput>
+		<StyledLabeledFormInput id={id}>
 			<label htmlFor={currentId}>{label}</label>
 			<FormInput id={currentId} {...rest} />
 		</StyledLabeledFormInput>

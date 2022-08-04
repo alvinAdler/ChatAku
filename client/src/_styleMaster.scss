@@ -1,0 +1,51 @@
+@mixin beginner-container{
+    min-height: 100vh;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom bottom;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin basic-form-style {
+    background-color: var(--color-light-dim);
+    box-shadow: 5px 5px 10px -5px var(--color-dark);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    padding: clamp(2rem, 4vw, 6rem) clamp(1rem, 3vw, 5rem);
+    align-self: stretch;
+    text-align: center;
+
+    h2{
+        font-weight: 400;
+        font-size: var(--fs-h2);
+        margin-bottom: 2rem;
+    }
+
+    button[type="submit"]{
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+        align-self: center;
+        padding: 0.8rem;
+        width: calc(min(7.5rem, 100%));
+    }
+}
+
+@mixin basic-form-container{
+    background: none;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	gap: 1rem;
+	width: calc(min(30rem, 80%));
+}
+
+@mixin avatar-mixin {
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    background-color: var(--color-light);
+    border: 2px solid var(--color-less);
+}

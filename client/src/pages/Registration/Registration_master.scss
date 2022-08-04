@@ -1,0 +1,73 @@
+@import "../../styleMaster";
+
+.regist-container{
+    @include beginner-container;
+
+    .form-container{
+        @include basic-form-container;
+        width: calc(min(50rem, 80%));
+
+        .form-elements{
+            @include basic-form-style;
+            padding: clamp(0.5rem, 2vw, 3rem);
+
+            display: grid;
+            gap: 1rem;
+            grid-template-areas: 
+            "form-title form-title"
+            "form-avatar form-avatar"
+            "form-fname form-lname"
+            "form-usname form-usname"
+            "form-pass form-confpass"
+            "form-submit form-submit";
+
+            h2{
+                grid-area: form-title;
+            }
+
+            #form-avatar{
+                grid-area: form-avatar;
+                margin-inline: auto;
+            }
+
+            #form-fname{
+                grid-area: form-fname;
+            }
+
+            #form-lname{
+                grid-area: form-lname;
+            }
+
+            #form-usname{
+                grid-area: form-usname;
+            }
+
+            #form-pass{
+                grid-area: form-pass;
+            }
+
+            #form-confpass{
+                grid-area: form-confpass;
+            }
+
+            #form-submit{
+                grid-area: form-submit;
+                margin-inline: auto;
+            }
+        }
+
+        @media screen and (max-width: 700px) {
+            .form-elements{
+                grid-template-areas:
+                "form-title"
+                "form-avatar"
+                "form-fname"
+                "form-lname"
+                "form-usname"
+                "form-pass"
+                "form-confpass"
+                "form-submit";
+            }
+        }
+    }
+}

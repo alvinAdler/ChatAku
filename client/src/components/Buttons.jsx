@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const DefaultButton = styled.button`
+const DefaultButton = styled.button.attrs(attrs => ({...attrs}))`
     padding: 0.5rem;
     color: var(--color-light);
     background-color: var(--color-accent);
@@ -8,12 +8,12 @@ const DefaultButton = styled.button`
     text-transform: uppercase;
     cursor: pointer;
     outline: none;
-    border: none;
+    border: 3px solid transparent;
     transition: 150ms all ease-in;
 
     &:hover, &:active, &:focus{
         background-color: var(--color-sub);
-        outline: 3px solid var(--color-accent);
+        border-color: var(--color-accent);
     }
 `
 

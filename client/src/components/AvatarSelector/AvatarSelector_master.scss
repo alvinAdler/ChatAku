@@ -1,0 +1,106 @@
+@import "../../styleMaster";
+
+.avatar-selection-container{
+    @include avatar-mixin;
+    position: relative;
+    width: 4rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .avatar-selector-button{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: none;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        transition: 150ms all ease-in-out;
+
+        &:hover, &:active, &:focus{
+            background-color: var(--color-accent);
+            
+            svg{
+                color: var(--color-light);
+            }
+        }
+    }
+
+    svg{
+        width: 60%;
+        height: 60%;
+        color: var(--color-dark);
+        transition: 150ms all ease-in-out;
+    }
+
+    .add-icon{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 30%;
+    }
+
+}
+
+.avatar-options{
+    visibility: hidden;
+    opacity: 0;
+
+    margin-top: 1rem;
+    position: absolute;
+    background-color: var(--color-light-dim);
+    border-radius: 10px;
+    padding: 0.5rem;
+    backdrop-filter: blur(5px);
+    top: 100%;
+    width: calc(max(30vw, 10rem));
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    transition: 150ms all ease-in-out;
+
+    &::before{
+        content: "";
+        background-color: var(--color-light-dim);
+        backdrop-filter: blur(5px);
+        bottom: 100%;
+        width: 1.5rem;
+        aspect-ratio: 1 / 1;
+        position: absolute;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    button{
+        width: max-content;
+        height: max-content;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        outline: none;
+        display: grid;
+        place-items: center;
+    }
+
+    img{
+        @include avatar-mixin;
+        width: clamp(3.5rem, 10vw, 5rem);
+        // width: 5rem;
+        cursor: pointer;
+        transition: 100ms transform ease-in;
+        margin: 0;
+
+        &:hover{
+            transform: scale(1.75);
+        }
+    }
+
+    &.show-options{
+        visibility: visible;
+        opacity: 1;
+    }
+}
