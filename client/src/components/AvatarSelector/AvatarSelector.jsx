@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
 import { FiUser, FiPlus } from 'react-icons/fi'
 
 import "./AvatarSelector_master.scss"
@@ -10,27 +9,43 @@ import avatar3 from '../../images/avatars/peep-72.svg'
 import avatar4 from '../../images/avatars/peep-99.svg'
 import avatar5 from '../../images/avatars/peep-102.svg'
 
-const AvatarSelector = ({...attrs}) => {
+const AVATAR_MAPPING = {
+	"Avatar1": avatar1,
+	"Avatar2": avatar2,
+	"Avatar3": avatar3,
+	"Avatar4": avatar4,
+	"Avatar5": avatar5,
+}
+
+const AvatarSelector = ({value, onChange, ...attrs}) => {
 
 	const [isAvatarShown, setIsAvatarShown] = useState(false)
 
 	const handleAvatarChange = (avatarName) => {
 		console.log(avatarName)
 		setIsAvatarShown((prevState) => !prevState)
+		onChange(avatarName)
 	}
 
 	return (
 		<div className='avatar-selection-container' {...attrs}>
-			<button className="avatar-selector-button" onClick={() => setIsAvatarShown((prevState) => !prevState)}>
-				<FiUser/>
-				<FiPlus className="add-icon"/>
+			<button type="button" className="avatar-selector-button" onClick={() => setIsAvatarShown((prevState) => !prevState)}>
+				{value === null || undefined || "" ?
+				<>
+					<FiUser/>
+					<FiPlus className="add-icon"/>
+				</>
+				:
+				<img src={[AVATAR_MAPPING[value]]} alt={`${value}`}/>
+				}
+
 			</button>
 			<div className={`avatar-options ${isAvatarShown && "show-options"}`}>
-				<button onClick={() => handleAvatarChange("Avatar 1")}><img src={avatar1} alt="Avatar 1" /></button>
-				<button onClick={() => handleAvatarChange("Avatar 2")}><img src={avatar2} alt="Avatar 2" /></button>
-				<button onClick={() => handleAvatarChange("Avatar 3")}><img src={avatar3} alt="Avatar 3" /></button>
-				<button onClick={() => handleAvatarChange("Avatar 4")}><img src={avatar4} alt="Avatar 4" /></button>
-				<button onClick={() => handleAvatarChange("Avatar 5")}><img src={avatar5} alt="Avatar 5" /></button>
+				<button type="button" onClick={() => handleAvatarChange("Avatar1")}><img src={avatar1} alt="Avatar 1" /></button>
+				<button type="button" onClick={() => handleAvatarChange("Avatar2")}><img src={avatar2} alt="Avatar 2" /></button>
+				<button type="button" onClick={() => handleAvatarChange("Avatar3")}><img src={avatar3} alt="Avatar 3" /></button>
+				<button type="button" onClick={() => handleAvatarChange("Avatar4")}><img src={avatar4} alt="Avatar 4" /></button>
+				<button type="button" onClick={() => handleAvatarChange("Avatar5")}><img src={avatar5} alt="Avatar 5" /></button>
 			</div>
 		</div>
 	)
