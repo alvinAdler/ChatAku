@@ -1,0 +1,6 @@
+.dashboard-container{
+    display: grid;
+    grid-template-columns: calc(max(15rem, 25%) ) 1fr;
+    min-height: 100vh;
+    background-color: var(--color-primary);
+}

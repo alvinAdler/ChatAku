@@ -1,0 +1,38 @@
+.sidebar-container{
+    background-color: var(--color-light);
+    border-right: 1px solid var(--color-accent);
+
+    header{
+        background-color: var(--color-accent);
+        padding: 1rem;
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        button{
+            background: none;
+            outline: none;
+            border: none;
+            color: var(--color-light);
+            font-size: 1.75rem;
+            transition: 150ms all ease-in-out;
+            outline: 2px solid transparent;
+
+            display: grid;
+            place-content: center;
+
+            &:hover, &:focus{
+                color: var(--color-sub);
+            }
+
+            &:focus{
+                outline-color: var(--color-light);
+            }
+        }
+
+        button:first-child{
+            margin-right: auto;
+        }
+    }
+}

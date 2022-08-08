@@ -1,11 +1,15 @@
 import "./Dashboard_master.scss"
 
-import LoadingScreen from "../../components/LoadingScreen/LoadingScreen"
+import Sidebar from "../../components/Sidebar/Sidebar"
 
 const Dashboard = () => {
 	return (
-		<div>
-			<h1>Dashboard</h1>
+		<div className="dashboard-container">
+			<Sidebar/>
+			<div className="main-chat">
+				<h1>Content</h1>
+				<p>Lorem</p>
+			</div>
 		</div>
 	)
 }
