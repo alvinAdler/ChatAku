@@ -4,3 +4,8 @@
     min-height: 100vh;
     background-color: var(--color-primary);
 }
+
+.dashboard-container > .main-chat{
+    border: 3px solid red;
+    position: relative;
+}
