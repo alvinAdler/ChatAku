@@ -1,11 +1,11 @@
 .dashboard-container{
-    display: grid;
-    grid-template-columns: calc(max(15rem, 25%) ) 1fr;
+    display: flex;
     min-height: 100vh;
     background-color: var(--color-primary);
 }
 
 .dashboard-container > .main-chat{
-    border: 3px solid red;
     position: relative;
+    // border: 3px solid blue;
+    flex-grow: 1;
 }

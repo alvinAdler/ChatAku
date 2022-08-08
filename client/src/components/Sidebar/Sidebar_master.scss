@@ -1,6 +1,20 @@
 .sidebar-container{
     background-color: var(--color-light);
     border-right: 1px solid var(--color-accent);
+    position: relative;
+    transform: translateX(-100%);
+    width: 0;
+    transition: 250ms all ease-in-out;
+    overflow: visible;
+    z-index: 50;
+    
+    .main-sidebar{
+        overflow: hidden;
+        transition: 250ms all ease-in-out;
+        height: 100%;
+        width: 100%;
+        visibility: hidden;
+    }
 
     header{
         background-color: var(--color-accent);
@@ -9,30 +23,52 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
 
-        button{
-            background: none;
-            outline: none;
-            border: none;
-            color: var(--color-light);
-            font-size: 1.75rem;
-            transition: 150ms all ease-in-out;
-            outline: 2px solid transparent;
+    button, a{
+        background: none;
+        outline: none;
+        border: none;
+        color: var(--color-light);
+        font-size: 1.75rem;
+        transition: 150ms all ease-in-out;
+        outline: 2px solid transparent;
+        cursor: pointer;
 
-            display: grid;
-            place-content: center;
+        display: grid;
+        place-content: center;
 
-            &:hover, &:focus{
-                color: var(--color-sub);
-            }
-
-            &:focus{
-                outline-color: var(--color-light);
-            }
+        &:hover, &:focus{
+            color: var(--color-sub);
         }
 
-        button:first-child{
-            margin-right: auto;
+        &:focus{
+            outline-color: var(--color-light);
         }
+    }
+
+    img{
+        margin-right: auto;
+    }
+
+    button:last-child{
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        background-color: var(--color-accent);
+        padding: 0.5rem;
+        border-radius: 0 50% 50% 0;
+    }
+}
+
+.sidebar-container.open{
+    flex-basis: calc(min(25rem, 90%));
+    width: auto;
+    transform: translateX(0);
+    transition: 250ms all ease-in-out;
+
+    .main-sidebar{
+        visibility: visible;
     }
 }
