@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 import "./Login_master.scss"
 
 import FormInput, { PasswordInput } from "../../components/FormInput"
 import DefaultButton from "../../components/Buttons"
 import customAxios from '../../utilities/customAxios'
+import useCookie from '../../utilities/hooks/useCookie'
 
 const Login = () => {
 
@@ -13,6 +15,8 @@ const Login = () => {
 		username: "",
 		password: ""
 	})
+
+	const navigate = useNavigate()
 
 	function handleLogin(ev){
 		ev.preventDefault()
@@ -26,10 +30,12 @@ const Login = () => {
 			if(res.status === 200){
 				alert("Login successful")
 				console.log(res)
+				Cookies.set("authToken", res.data.authToken)
 				setUserInfo({
 					username: "",
 					password: ""
 				})
+				navigate("/", {replace: true})
 			}
 		})
 		.catch((err) => {
