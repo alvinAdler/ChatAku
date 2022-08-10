@@ -4,16 +4,19 @@
 	--color-less: #ced4da;
 
 	--color-light-dim: rgba(242, 242, 242, 0.7);
+	--color-dark-dim: rgba(43, 43, 43, 0.7);
 
 	--color-primary: #dfecf5;
 	--color-sub: #85acd3;
 	--color-accent: #356cb1;
 	--color-text: var(--color-dark);
 
+	--fs-h1: 2rem;
 	--fs-h2: clamp(1.8rem, 2.5vw, 2rem);
 	--fs-small: 0.8rem;
 
 	--w-fcontainer: clamp(5rem,7vw, 8rem);
+	--w-profilepict-detail: clamp(5rem, 13vw, 15rem);
 }
 
 *,
@@ -44,6 +47,11 @@ input, p, span, button, a{
 a{
 	color: var(--color-accent);
 	font-weight: bold;
+}
+
+h2{
+	font-size: var(--fs-h2);
+	font-weight: 400;
 }
 
 #root,

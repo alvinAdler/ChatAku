@@ -45,6 +45,7 @@ const FriendsPage = () => {
 					<FriendHolder username='Hello World' avatarName="Avatar5"/>
 					<FriendHolder username='Hello World' avatarName="Avatar5"/>
 					<FriendHolder username='Hello World' avatarName="Avatar5"/>
+					<FriendHolder username='Hello World' avatarName="Avatar5"/>
 				</div>
 			</div>
 		</div>
