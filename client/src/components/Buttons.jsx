@@ -10,6 +10,7 @@ const DefaultButton = styled.button.attrs(attrs => ({...attrs}))`
     outline: none;
     border: 3px solid transparent;
     transition: 150ms all ease-in;
+    min-width: 3.5rem;
 
     &:hover, &:active, &:focus{
         background-color: var(--color-sub);

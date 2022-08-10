@@ -1,0 +1,16 @@
+.friend-holder-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    width: var(--w-fcontainer);
+
+    span{
+        width: 100%;
+        overflow-x: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

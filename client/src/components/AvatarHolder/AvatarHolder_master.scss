@@ -1,0 +1,6 @@
+@import "../../styleMaster";
+
+.avatar-holder{
+    @include avatar-mixin;
+    width: var(--w-fcontainer)
+}
