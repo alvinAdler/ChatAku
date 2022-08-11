@@ -61,7 +61,7 @@
         gap: 1.5rem
     }
 
-    .friends-list{
+    .friends-list, .discover-friends{
         @extend .incoming-requests;
         margin-top: 2rem;
     }

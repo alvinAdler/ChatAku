@@ -5,7 +5,7 @@ import "./SearchInput_master.scss"
 import FormInput from "../FormInput"
 import DefaultButton from '../Buttons'
 
-const SearchInput = ({placeholder="Search your friend", className}) => {
+const SearchInput = ({placeholder="Search", className}) => {
     return (
         <div className={`search-input-container ${className}`}>
             <FormInput placeholder={placeholder}/>
