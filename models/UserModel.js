@@ -27,6 +27,12 @@ const UserSchema = new Schema({
         required: true,
         default: [],
         ref: "users"
+    },
+    requestList: {
+        type: [mongoose.ObjectId],
+        required: true,
+        default: [],
+        ref: "users"
     }
 }, {versionKey: false})
 

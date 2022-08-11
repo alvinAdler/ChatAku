@@ -97,6 +97,39 @@ router.post("/login", async (req, res) => {
     })
 })
 
+router.get("/getRequests", tokenVerif, async (req, res) => {
+    
+})
+
+router.post("/sendRequest", tokenVerif, async (req, res) => {
+    const { targetUserId } = req.body
+
+    if(targetUserId === undefined || targetUserId === null){
+        return res.status(400).json({
+            message: "No target user provided."
+        })
+    }
+
+    //Putting each user's ID into the other's request list
+    try{
+        const resCurrentUser = await UserModel.updateOne({_id: req.user._id}, {$addToSet: {requestList: targetUserId}})
+        const resTargetUser = await UserModel.updateOne({_id: targetUserId}, {$addToSet: {requestList: req.user._id}})
+
+        if(resCurrentUser.acknowledged && resTargetUser.acknowledged){
+            return res.status(200).json({
+                message: "Request sent"
+            })
+        }
+
+        throw new Error("Failed to modify both user's request list")
+    }catch(err){
+        return res.status(500).json({
+            message: "Unable to send request",
+            err: `${err}`
+        })
+    }
+})
+
 router.post("/tokenChecker", tokenVerif, (req, res) => {
     return res.status(200).json({
         message: "User is authenticated",
