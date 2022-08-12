@@ -98,7 +98,22 @@ router.post("/login", async (req, res) => {
 })
 
 router.get("/getRequests", tokenVerif, async (req, res) => {
-    
+    try{
+        const { requestList } = await UserModel.findOne({_id: req.user._id}).populate({
+            path: "requestList",
+            select: "username firstName lastname _id avatarName"
+        })
+
+        return res.status(200).json({
+            message: "Successfully get the request list",
+            requestList
+        })
+    }catch(err){
+        return res.status(500).json({
+            message: "Failed to get requests list",
+            err: `${err}`
+        })
+    }
 })
 
 router.post("/sendRequest", tokenVerif, async (req, res) => {
