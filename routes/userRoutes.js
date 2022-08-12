@@ -129,11 +129,13 @@ router.post("/sendRequest", tokenVerif, async (req, res) => {
         })
     }
 
-    //TODO: Do extra validations
-    /**
-     * Do not let the user send a request to the him/herself or to the other
-     * user who already accepted the friend request
-     */
+    const currentUser = await UserModel.findOne({_id: req.user._id})
+
+    if(targetUserId === req.user._id || currentUser.friendsList.includes(targetUserId)){
+        return res.status(400).json({
+            message: "Can not add a request towards self or a user who already on the friends list"
+        })
+    }
 
     //Putting each user's ID into the other's request list
     try{
@@ -148,7 +150,7 @@ router.post("/sendRequest", tokenVerif, async (req, res) => {
 
         throw new Error("Failed to modify both user's request list")
     }catch(err){
-        return res.status(500).json({
+        return res.status(400).json({
             message: "Unable to send request",
             err: `${err}`
         })
