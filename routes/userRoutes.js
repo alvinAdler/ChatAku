@@ -174,6 +174,35 @@ router.get("/getFriends", tokenVerif, async(req, res) => {
     }
 })
 
+router.patch("/deleteFriend", tokenVerif, async(req, res) => {
+    const { targetUserId } = req.body
+
+    if(targetUserId === undefined){
+        return res.status(400).json({
+            message: "No target user ID provided"
+        })
+    }
+
+    try{
+        const resCurrentUser = await UserModel.updateOne({_id: req.user._id, friendsList: targetUserId}, {$pull: {"friendsList": targetUserId}})
+        const resTargetUser = await UserModel.updateOne({_id: targetUserId, friendsList: req.user._id}, {$pull: {"friendsList": req.user._id}})
+
+        if([resCurrentUser, resTargetUser].every((item) => item.acknowledged && item.modifiedCount > 0)){
+            return res.status(200).json({
+                message: "Successfully removed a friend from the list"
+            })
+        }
+
+        throw new Error("One process was not acknowledged")
+
+    }catch(err){
+        return res.status(500).json({
+            message: "Failed to remove a friend from the list",
+            err: `${err}`
+        })
+    }
+})
+
 router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
     const { targetUserId, action } = req.body
 
