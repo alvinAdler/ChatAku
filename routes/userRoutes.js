@@ -105,7 +105,7 @@ router.get("/getRequests", tokenVerif, async (req, res) => {
     try{
         const { requestList } = await UserModel.findOne({_id: req.user._id}).populate({
             path: "requestList",
-            select: "username firstName lastname avatarName"
+            select: "username firstName lastName avatarName"
         })
 
         return res.status(200).json({
@@ -161,7 +161,7 @@ router.get("/getFriends", tokenVerif, async(req, res) => {
     try{
         const { friendsList } = await UserModel.findOne({_id: req.user._id}).populate({
             path: "friendsList",
-            select: "username firstName lastname avatarName"
+            select: "username firstName lastName avatarName"
         })
 
         return res.status(200).json({

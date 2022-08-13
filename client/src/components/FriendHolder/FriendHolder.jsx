@@ -12,7 +12,7 @@ const DUMMY_USER = {
 	username: "johnyblack"
 }
 
-const FriendHolder = ({username="User", avatarName}) => {
+const FriendHolder = ({user=DUMMY_USER}) => {
 
 	const [isDetailVisible, setIsDetailVisible] = useState(false)
 
@@ -21,11 +21,11 @@ const FriendHolder = ({username="User", avatarName}) => {
 			<div className="friend-holder-container" 
 			onClick={() => setIsDetailVisible((prevState) => !prevState)}
 			>
-				<AvatarHolder avatarName={avatarName}/>
-				<span>{username}</span>
+				<AvatarHolder avatarName={user.avatarName}/>
+				<span>{user.username}</span>
 			</div>
 
-			<ProfileDetails userInfo={DUMMY_USER} isDetailVisible={isDetailVisible} onDetailToggle={() => setIsDetailVisible((prevState) => !prevState)}/>
+			<ProfileDetails userInfo={user} isDetailVisible={isDetailVisible} onDetailToggle={() => setIsDetailVisible((prevState) => !prevState)}/>
 		</>
 	)
 }

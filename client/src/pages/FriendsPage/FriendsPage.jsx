@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import { v4 as uuid } from 'uuid'
 
 import "./FriendsPage_master.scss"
 
 import FriendHolder from '../../components/FriendHolder/FriendHolder'
 import SearchInput from '../../components/SearchInput/SearchInput'
 import EmptyBanner from '../../components/EmptyBanner'
+
+import customAxios from '../../utilities/customAxios'
 
 const PAGE = {
 	FRIENDS: "friends",
@@ -15,6 +20,36 @@ const PAGE = {
 const FriendsPage = () => {
 
 	const [page, setPage] = useState(PAGE.FRIENDS)
+	const [requestsList, setRequestsList] = useState([])
+	const [friendsList, setFriendsList] = useState([])
+	const [discoverFriends, setDiscoverFriends] = useState(null)
+
+	useEffect(() => {
+		axios.all([
+			customAxios({
+				method: "GET",
+				url: "/users/getRequests",
+				headers: {
+					"Authorization": `Bearer ${Cookies.get("authToken")}`
+				}
+			}),
+			customAxios({
+				method: "GET",
+				url: "/users/getFriends",
+				headers: {
+					"Authorization": `Bearer ${Cookies.get("authToken")}`
+				}
+			})
+		])
+		.then(axios.spread((resultRequest, resultFriends) => {
+			if([resultRequest, resultFriends].every((item) => item.status === 200)){
+				setRequestsList(resultRequest.data.requestList)
+				setFriendsList(resultFriends.data.friendsList)
+
+				console.log(resultFriends)
+			}
+		}))
+	}, [])
 
 	return (
 		<div className="friends-page-container">
@@ -37,36 +72,29 @@ const FriendsPage = () => {
 			{
 				page === PAGE.FRIENDS ? 
 				<>
+				{requestsList.length > 0 &&
 				<div className="incoming-requests">
 					<h2>Incoming Requests</h2>
 					<div className="users-container">
-						<FriendHolder username='Becky and the prisoner of Azkaban' avatarName="Avatar1"/>
-						<FriendHolder username='Becky and another name' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
-						<FriendHolder username='Becky' avatarName="Avatar1"/>
+						{requestsList.map((request) => (
+							<FriendHolder key={uuid()} user={request}/>
+						))}
 					</div>
 				</div>
+				}
 				<div className="friends-list">
 					<SearchInput placeholder="Search your friend!"/>
 					<div className="users-container">
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
-						<FriendHolder username='Hello World' avatarName="Avatar5"/>
+						{friendsList.length > 0 ?
+							friendsList.map((friend) => (
+								<FriendHolder key={uuid()} user={friend}/>
+							))
+						:
+							<EmptyBanner>
+								<p>Oops! No friends yet</p>
+								<p>Meet new people in the discover menu above!</p>
+							</EmptyBanner>
+						}
 					</div>
 				</div>
 				</>
@@ -74,24 +102,19 @@ const FriendsPage = () => {
 				<>
 				<div className="discover-friends">
 					<SearchInput placeholder="Search a friend!"/>
-					<div className="users-container">
-						<FriendHolder username="Sample" avatarName="Avatar2"/>
-						<FriendHolder username="Sample" avatarName="Avatar3"/>
-						<FriendHolder username="Sample" avatarName="Avatar4"/>
-						<FriendHolder username="Sample" avatarName="Avatar2"/>
-						<FriendHolder username="Sample" avatarName="Avatar3"/>
-						<FriendHolder username="Sample" avatarName="Avatar4"/>
-						<FriendHolder username="Sample" avatarName="Avatar2"/>
-						<FriendHolder username="Sample" avatarName="Avatar3"/>
-						<FriendHolder username="Sample" avatarName="Avatar4"/>
-						<FriendHolder username="Sample" avatarName="Avatar2"/>
-						<FriendHolder username="Sample" avatarName="Avatar3"/>
-						<FriendHolder username="Sample" avatarName="Avatar4"/>
-					</div>
-					<EmptyBanner>
-						<p>No user to be found!</p>
-						<p>Please try to look for another user</p>
-					</EmptyBanner>
+					{discoverFriends !== null &&(
+						discoverFriends.length > 0 ?
+						<div className="users-container">
+							{discoverFriends.map((user) => (
+								<FriendHolder key={uuid()} user={user}/>
+							))}
+						</div>
+						:
+						<EmptyBanner>
+							<p>No friends to be found!</p>
+							<p>Try to look for another username</p>
+						</EmptyBanner>
+					)}
 				</div>
 				</>
 			}
