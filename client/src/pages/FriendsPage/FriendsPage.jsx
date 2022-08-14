@@ -51,6 +51,10 @@ const FriendsPage = () => {
 		}))
 	}, [])
 
+	const handleUsersSearch = (keyword) => {
+		console.log(keyword)
+	}
+
 	return (
 		<div className="friends-page-container">
 			<div className="tab-navigations">
@@ -101,7 +105,7 @@ const FriendsPage = () => {
 				:
 				<>
 				<div className="discover-friends">
-					<SearchInput placeholder="Search a friend!"/>
+					<SearchInput placeholder="Search a friend!" onSearch={handleUsersSearch}/>
 					{discoverFriends !== null &&(
 						discoverFriends.length > 0 ?
 						<div className="users-container">

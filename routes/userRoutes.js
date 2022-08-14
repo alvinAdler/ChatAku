@@ -101,6 +101,30 @@ router.post("/login", async (req, res) => {
     })
 })
 
+router.get("/findUsers", tokenVerif, async(req, res) => {
+    const { keyword } = req.query
+
+    if(keyword === undefined || keyword ===  null){
+        return res.status(400).json({
+            message: "No keyword provided"
+        })
+    }
+
+    try{
+        const users = await UserModel.find({username: {$regex: keyword, $options: "gi"}}, "username avatarName firstName lastName")
+
+        return res.status(200).json({
+            message: "Users found",
+            users
+        })
+    }catch(err){
+        return res.status(500).json({
+            message: "Failed to search users",
+            err: `${err}`
+        })
+    }
+})
+
 router.get("/getRequests", tokenVerif, async (req, res) => {
     try{
         const { requestList } = await UserModel.findOne({_id: req.user._id}).populate({
