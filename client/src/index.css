@@ -6,6 +6,9 @@
 	--color-light-dim: rgba(242, 242, 242, 0.7);
 	--color-dark-dim: rgba(43, 43, 43, 0.7);
 
+	--color-danger: #EB4034;
+	--color-danger-dim: rgb(235, 64, 52, 0.7);
+
 	--color-primary: #dfecf5;
 	--color-sub: #85acd3;
 	--color-accent: #356cb1;

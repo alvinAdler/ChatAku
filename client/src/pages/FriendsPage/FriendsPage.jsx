@@ -63,6 +63,7 @@ const FriendsPage = () => {
 		.then((res) => {
 			if(res.status === 200){
 				setDiscoverFriends(res.data.users)
+				console.log(res.data)
 			}
 		})
 		.catch((err) => {

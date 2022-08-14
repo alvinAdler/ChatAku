@@ -111,7 +111,19 @@ router.get("/findUsers", tokenVerif, async(req, res) => {
     }
 
     try{
-        const users = await UserModel.find({username: {$regex: keyword, $options: "gi"}}, "username avatarName firstName lastName")
+        const foundUsers = await UserModel.find({username: {$regex: keyword, $options: "gi"}, _id: {$ne: req.user._id}}, "username avatarName firstName lastName")
+        const currentUser = await UserModel.findOne({_id: req.user._id})
+
+        console.log(currentUser)
+
+        const users = foundUsers.map((user) => {
+            const modUser = user.toObject()
+
+            //A user is our friend if that user's ID is in our friends list
+            modUser.isFriend = currentUser.friendsList.includes(modUser._id)
+
+            return modUser
+        })
 
         return res.status(200).json({
             message: "Users found",
@@ -183,9 +195,15 @@ router.post("/sendRequest", tokenVerif, async (req, res) => {
 
 router.get("/getFriends", tokenVerif, async(req, res) => {
     try{
-        const { friendsList } = await UserModel.findOne({_id: req.user._id}).populate({
+        const currentUser = await UserModel.findOne({_id: req.user._id}).populate({
             path: "friendsList",
             select: "username firstName lastName avatarName"
+        })
+
+        const friendsList = currentUser.friendsList.map((user) => {
+            const modUser = user.toObject()
+            modUser.isFriend = true
+            return modUser
         })
 
         return res.status(200).json({

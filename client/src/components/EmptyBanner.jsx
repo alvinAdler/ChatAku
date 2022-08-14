@@ -6,7 +6,7 @@ const EmptyBanner = styled.div.attrs((attrs) => ({...attrs}))`
     padding: 2rem;
     text-align: center;
     box-shadow: 5px 5px 15px -10px var(--color-dark);
-    max-width: 80%;
+    width: 80%;
 
     *:first-child{
         font-size: var(--fs-h2);

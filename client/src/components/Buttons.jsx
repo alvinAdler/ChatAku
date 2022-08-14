@@ -8,14 +8,25 @@ const DefaultButton = styled.button.attrs(attrs => ({...attrs}))`
     text-transform: uppercase;
     cursor: pointer;
     outline: none;
-    border: 3px solid transparent;
+    border: 3px solid var(--color-accent);
     transition: 150ms all ease-in;
     min-width: 3.5rem;
 
-    &:hover, &:active, &:focus{
+    &:hover, &:focus{
         background-color: var(--color-sub);
-        border-color: var(--color-accent);
+    }
+`
+
+const DeclineButton = styled(DefaultButton)`
+    background-color: var(--color-danger);
+    border: 3px solid var(--color-danger);
+
+    &:hover, &:focus{
+        background-color: var(--color-danger-dim);
+        border-color: var(--color-danger);
     }
 `
 
 export default DefaultButton
+
+export { DeclineButton }
