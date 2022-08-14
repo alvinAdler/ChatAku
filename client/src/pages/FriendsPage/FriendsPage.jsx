@@ -52,7 +52,26 @@ const FriendsPage = () => {
 	}, [])
 
 	const handleUsersSearch = (keyword) => {
-		console.log(keyword)
+		customAxios({
+			method: "GET",
+			url: "/users/findUsers",
+			headers: {
+				"Authorization": `Bearer ${Cookies.get("authToken")}`,
+			},
+			params: {keyword}
+		})
+		.then((res) => {
+			if(res.status === 200){
+				setDiscoverFriends(res.data.users)
+			}
+		})
+		.catch((err) => {
+			if(err.response){
+				console.error(err.response.data)
+			}else{
+				console.error(err)
+			}
+		})
 	}
 
 	return (
