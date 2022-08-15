@@ -25,7 +25,9 @@ const FriendHolder = ({user=DUMMY_USER}) => {
 				<span>{user.username}</span>
 			</div>
 
-			<ProfileDetails userInfo={user} isDetailVisible={isDetailVisible} onDetailToggle={() => setIsDetailVisible((prevState) => !prevState)}/>
+			<ProfileDetails userInfo={user} isDetailVisible={isDetailVisible}
+			onDetailToggle={() => setIsDetailVisible((prevState) => !prevState)}
+			/>
 		</>
 	)
 }

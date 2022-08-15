@@ -52,6 +52,9 @@ const FriendsPage = () => {
 	}, [])
 
 	const handleUsersSearch = (keyword) => {
+
+		//TODO: Validate user's input
+
 		customAxios({
 			method: "GET",
 			url: "/users/findUsers",

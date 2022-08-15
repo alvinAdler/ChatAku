@@ -9,8 +9,8 @@ const tokenVerif = require("../middlewares/tokenVerif")
 
 const SALT_ROUND = 10
 const ALLOWED_REQUEST_METHOD = {
-    REJECT: "reject",
-    ACCEPT: "accept"
+    REJECT: "REJECT",
+    ACCEPT: "ACCEPT"
 }
 
 router.post("/register", async (req, res) => {
@@ -114,13 +114,18 @@ router.get("/findUsers", tokenVerif, async(req, res) => {
         const foundUsers = await UserModel.find({username: {$regex: keyword, $options: "gi"}, _id: {$ne: req.user._id}}, "username avatarName firstName lastName")
         const currentUser = await UserModel.findOne({_id: req.user._id})
 
-        console.log(currentUser)
-
         const users = foundUsers.map((user) => {
             const modUser = user.toObject()
 
-            //A user is our friend if that user's ID is in our friends list
-            modUser.isFriend = currentUser.friendsList.includes(modUser._id)
+            //Determining the status of the user
+
+            if(currentUser.friendsList.includes(modUser._id)){
+                modUser.status = "FRIEND"
+            }else if(currentUser.requestList.includes(modUser._id)){
+                modUser.status = "REQUESTING"
+            }else{
+                modUser.status = "STRANGER"
+            }
 
             return modUser
         })
@@ -139,9 +144,16 @@ router.get("/findUsers", tokenVerif, async(req, res) => {
 
 router.get("/getRequests", tokenVerif, async (req, res) => {
     try{
-        const { requestList } = await UserModel.findOne({_id: req.user._id}).populate({
+        const currentUser = await UserModel.findOne({_id: req.user._id}).populate({
             path: "requestList",
             select: "username firstName lastName avatarName"
+        })
+
+        const requestList = currentUser.requestList.map((user) => {
+            const tempUser = user.toObject()
+            tempUser.status = "REQUESTING"
+
+            return tempUser
         })
 
         return res.status(200).json({
@@ -173,12 +185,12 @@ router.post("/sendRequest", tokenVerif, async (req, res) => {
         })
     }
 
-    //Putting each user's ID into the other's request list
+    //The ID of the user who request a friendship will be put
+    //into the request list of the target
     try{
-        const resCurrentUser = await UserModel.updateOne({_id: req.user._id}, {$addToSet: {requestList: targetUserId}})
         const resTargetUser = await UserModel.updateOne({_id: targetUserId}, {$addToSet: {requestList: req.user._id}})
 
-        if(resCurrentUser.acknowledged && resTargetUser.acknowledged){
+        if(resTargetUser.acknowledged){
             return res.status(200).json({
                 message: "Request sent"
             })
@@ -200,10 +212,11 @@ router.get("/getFriends", tokenVerif, async(req, res) => {
             select: "username firstName lastName avatarName"
         })
 
-        const friendsList = currentUser.friendsList.map((user) => {
-            const modUser = user.toObject()
-            modUser.isFriend = true
-            return modUser
+        const friendsList = currentUser.friendsList.map((friend) => {
+            const tempFriend = friend.toObject()
+            tempFriend.status = "FRIEND"
+
+            return tempFriend
         })
 
         return res.status(200).json({
@@ -256,16 +269,25 @@ router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
         })
     }
 
-    switch(action.toLowerCase()){
+    switch(action.toUpperCase()){
         case ALLOWED_REQUEST_METHOD.ACCEPT:
             //Move the users' ID from the request list to the friends list
             try {
-                const resTargetUser = await UserModel.updateOne({_id: targetUserId, requestList: req.user._id}, {
+                //Check if there is a user with ID targetUserId in the request list
+                const requestCount = await UserModel.countDocuments({_id: req.user._id, requestList: targetUserId})
+
+                if(requestCount < 1){
+                    return res.status(400).json({
+                        message: "Can not accept a request that does not exist"
+                    })
+                }
+
+                const resTargetUser = await UserModel.updateOne({_id: targetUserId}, {
                     $push: {"friendsList": req.user._id},
                     $pull: {"requestList": req.user._id}
                 })
-    
-                const resCurrentUser = await UserModel.updateOne({_id: req.user._id, requestList: targetUserId}, {
+
+                const resCurrentUser = await UserModel.updateOne({_id: req.user._id}, {
                     $push: {"friendsList": targetUserId},
                     $pull: {"requestList": targetUserId}
                 })
@@ -276,7 +298,10 @@ router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
                     })
                 }
 
-                throw new Error("One process was not acknowledged")
+                return res.status(200).json({
+                    message: "Successfully accepted the friend request",
+                    warning: "One process was not acknowledged"
+                })
 
             } catch (err) {
                 return res.status(500).json({
@@ -287,16 +312,12 @@ router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
 
         case ALLOWED_REQUEST_METHOD.REJECT:
             //Delete the users' ID from the request list
-            try {
-                const resTargetUser = await UserModel.updateOne({_id: targetUserId, requestList: req.user._id}, {
-                    $pull: {"requestList": req.user._id}
-                })
-    
+            try {    
                 const resCurrentUser = await UserModel.updateOne({_id: req.user._id, requestList: targetUserId}, {
                     $pull: {"requestList": targetUserId}
                 })
 
-                if([resTargetUser, resCurrentUser].every((item) => item.acknowledged && item.modifiedCount > 0)){
+                if(resCurrentUser.acknowledged && resCurrentUser.modifiedCount > 0){
                     return res.status(200).json({
                         message: "Successfully rejected the friend request"
                     })

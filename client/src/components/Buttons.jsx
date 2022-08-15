@@ -27,6 +27,16 @@ const DeclineButton = styled(DefaultButton)`
     }
 `
 
+const SuccessButton = styled(DefaultButton)`
+    background-color: var(--color-success);
+    border: 3px solid var(--color-success);
+
+    &:hover, &:focus{
+        background-color: var(--color-success-dim);
+        border-color: var(--color-success);
+    }
+`
+
 export default DefaultButton
 
-export { DeclineButton }
+export { DeclineButton, SuccessButton }
