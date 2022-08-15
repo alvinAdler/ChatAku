@@ -39,6 +39,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 		.then((res) => {
 			if(res.status === 200){
 				alert("User has been removed from friend list")
+				onDetailToggle()
 			}
 		})
 		.catch((err) => {
@@ -48,6 +49,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 				console.error(err)
 			}
 		})
+
 	}
 
 	const handleFriendRequest = () => {
@@ -62,6 +64,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 		.then((res) => {
 			if(res.status === 200){
 				alert("Friend request has been sent")
+				onDetailToggle()
 			}
 		})
 		.catch((err) => {
@@ -71,6 +74,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 				console.error(err)
 			}
 		})
+
 	}
 
 	const handleRequest = (action) => {
@@ -93,6 +97,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 		.then((res) => {
 			if(res.status === 200){
 				alert("Friend request has been accepted")
+				onDetailToggle()
 			}
 		})
 		.catch((err) => {

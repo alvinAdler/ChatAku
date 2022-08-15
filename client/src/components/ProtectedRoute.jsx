@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import { Navigate } from 'react-router-dom'
+import { useDispatch } from "react-redux"
 import Cookies from 'js-cookie'
 
 import LoadingScreen from './LoadingScreen/LoadingScreen'
 import customAxios from '../utilities/customAxios'
+import { setFriendsList, setRequestList } from "../utilities/reducers/user"
 
 const STATES = {
     LOADING: "loading",
@@ -13,6 +15,8 @@ const STATES = {
 
 const ProtectedRoute = ({component: Component}) => {
     const [currentState, setCurrentState] = useState(STATES.LOADING)
+
+    const userDispatcher = useDispatch()
 
     useEffect(() => {
 
@@ -33,6 +37,8 @@ const ProtectedRoute = ({component: Component}) => {
         .then((res) => {
             if(res.status === 200){
                 setCurrentState(STATES.ACCEPTED)
+                userDispatcher(setFriendsList({friendsList: res.data.friendsList}))
+                userDispatcher(setRequestList({requestList: res.data.requestList}))
             }
         })
         .catch((err) => {

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
+import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
-import axios from 'axios'
 import { v4 as uuid } from 'uuid'
 
 import "./FriendsPage_master.scss"
@@ -20,36 +20,9 @@ const PAGE = {
 const FriendsPage = () => {
 
 	const [page, setPage] = useState(PAGE.FRIENDS)
-	const [requestsList, setRequestsList] = useState([])
-	const [friendsList, setFriendsList] = useState([])
 	const [discoverFriends, setDiscoverFriends] = useState(null)
 
-	useEffect(() => {
-		axios.all([
-			customAxios({
-				method: "GET",
-				url: "/users/getRequests",
-				headers: {
-					"Authorization": `Bearer ${Cookies.get("authToken")}`
-				}
-			}),
-			customAxios({
-				method: "GET",
-				url: "/users/getFriends",
-				headers: {
-					"Authorization": `Bearer ${Cookies.get("authToken")}`
-				}
-			})
-		])
-		.then(axios.spread((resultRequest, resultFriends) => {
-			if([resultRequest, resultFriends].every((item) => item.status === 200)){
-				setRequestsList(resultRequest.data.requestList)
-				setFriendsList(resultFriends.data.friendsList)
-
-				console.log(resultFriends)
-			}
-		}))
-	}, [])
+	const userSelector = useSelector((state) => state.user)
 
 	const handleUsersSearch = (keyword) => {
 
@@ -99,11 +72,11 @@ const FriendsPage = () => {
 			{
 				page === PAGE.FRIENDS ? 
 				<>
-				{requestsList.length > 0 &&
+				{userSelector.requestList.length > 0 &&
 				<div className="incoming-requests">
 					<h2>Incoming Requests</h2>
 					<div className="users-container">
-						{requestsList.map((request) => (
+						{userSelector.requestList.map((request) => (
 							<FriendHolder key={uuid()} user={request}/>
 						))}
 					</div>
@@ -112,8 +85,8 @@ const FriendsPage = () => {
 				<div className="friends-list">
 					<SearchInput placeholder="Search your friend!"/>
 					<div className="users-container">
-						{friendsList.length > 0 ?
-							friendsList.map((friend) => (
+						{userSelector.friendsList.length > 0 ?
+							userSelector.friendsList.map((friend) => (
 								<FriendHolder key={uuid()} user={friend}/>
 							))
 						:

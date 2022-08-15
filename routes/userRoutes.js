@@ -338,10 +338,33 @@ router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
     }
 })
 
-router.post("/tokenChecker", tokenVerif, (req, res) => {
+router.post("/tokenChecker", tokenVerif, async (req, res) => {
+
+    const currentUser = await UserModel.findOne({_id: req.user._id}, "friendsList requestList").populate({
+        path: "friendsList",
+        select: "username firstName lastName avatarName"
+    }).populate({
+        path: "requestList",
+        select: "username firstName lastName avatarName"
+    })
+
+    const friendsList = currentUser.friendsList.map((friend) => {
+        const tempFriend = friend.toObject()
+        tempFriend.status = "FRIEND"
+
+        return tempFriend
+    })
+
+    const requestList = currentUser.requestList.map((user) => {
+        const tempUser = user.toObject()
+        tempUser.status = "REQUESTING"
+
+        return tempUser
+    })
+
     return res.status(200).json({
         message: "User is authenticated",
-        user: req.user
+        friendsList, requestList
     })
 })
 
