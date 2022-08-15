@@ -26,7 +26,28 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 	}
 
 	const handleFriendRemoval = () => {
-		console.log("Friend Removed")
+		customAxios({
+			method: "PATCH",
+			url: "/users/deleteFriend",
+			headers: {
+				"Authorization": `Bearer ${Cookies.get("authToken")}`
+			},
+			data: {
+				targetUserId: userInfo._id,
+			}
+		})
+		.then((res) => {
+			if(res.status === 200){
+				alert("User has been removed from friend list")
+			}
+		})
+		.catch((err) => {
+			if(err.response){
+				console.error(err.response.data)
+			}else{
+				console.error(err)
+			}
+		})
 	}
 
 	const handleFriendRequest = () => {
@@ -53,9 +74,6 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 	}
 
 	const handleRequest = (action) => {
-
-		console.log(action)
-
 		if(action.toUpperCase() !== "ACCEPT" && action.toUpperCase() !== "REJECT"){
 			alert("Invalid action")
 			return
