@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import { v4 as uuid } from 'uuid'
 
@@ -13,6 +13,7 @@ import Pagination from '../../components/Pagination/Pagination'
 
 import customAxios from '../../utilities/customAxios'
 import usePagination from '../../utilities/hooks/usePagination'
+import { findOBP } from '../../utilities/utilityFunctions'
 
 const PAGE = {
 	FRIENDS: "friends",
@@ -26,7 +27,9 @@ const FriendsPage = () => {
 	const discoverPaginator = usePagination(discoverFriends, 50)
 
 	const userSelector = useSelector((state) => state.user)
-	const friendPaginator = usePagination(userSelector.friendsList, 50)
+	const [searchedFriends, setSearchedFriends] = useState(userSelector.friendsList)
+
+	const friendPaginator = usePagination(searchedFriends, 50)
 
 	const handleUsersSearch = (keyword) => {
 		customAxios({
@@ -50,6 +53,11 @@ const FriendsPage = () => {
 				console.error(err)
 			}
 		})
+	}
+
+	function handleFriendsSearch(keyword){
+		console.log("this")
+		setSearchedFriends(() => findOBP(userSelector.friendsList, "username", keyword))
 	}
 
 	return (
@@ -84,7 +92,7 @@ const FriendsPage = () => {
 				</div>
 				}
 				<div className="friends-list">
-					<SearchInput placeholder="Search your friend!"/>
+					<SearchInput placeholder="Search your friend!" onSearch={handleFriendsSearch}/>
 					<div className="users-container">
 						{userSelector.friendsList.length > 0 ?
 							friendPaginator.paginatedItems.map((friend) => (
