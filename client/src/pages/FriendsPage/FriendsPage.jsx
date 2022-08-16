@@ -29,9 +29,6 @@ const FriendsPage = () => {
 	const friendPaginator = usePagination(userSelector.friendsList, 50)
 
 	const handleUsersSearch = (keyword) => {
-
-		//TODO: Validate user's input
-
 		customAxios({
 			method: "GET",
 			url: "/users/findUsers",
