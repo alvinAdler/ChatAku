@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import { useSelector } from 'react-redux'
-import Cookies from 'js-cookie'
 import { v4 as uuid } from 'uuid'
+import { Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 import "./FriendsPage_master.scss"
 
@@ -63,7 +64,7 @@ const FriendsPage = () => {
 	return (
 		<div className="friends-page-container">
 			<div className="tab-navigations">
-				<button type="button"><MdOutlineArrowBackIosNew/></button>
+				<Link to="/"><MdOutlineArrowBackIosNew/></Link>
 				<p>
 					<button className={`${page === PAGE.FRIENDS && "active"}`}
 					onClick={() => setPage(PAGE.FRIENDS)}
@@ -94,13 +95,13 @@ const FriendsPage = () => {
 				<div className="friends-list">
 					<SearchInput placeholder="Search your friend!" onSearch={handleFriendsSearch}/>
 					<div className="users-container">
-						{userSelector.friendsList.length > 0 ?
+						{searchedFriends.length > 0 ?
 							friendPaginator.paginatedItems.map((friend) => (
 								<FriendHolder key={uuid()} user={friend}/>
 							))
 						:
 							<EmptyBanner>
-								<p>Oops! No friends yet</p>
+								<p>Oops! No friends found</p>
 								<p>Meet new people in the discover menu above!</p>
 							</EmptyBanner>
 						}

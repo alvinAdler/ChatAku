@@ -14,6 +14,12 @@ const SearchInput = ({placeholder="Search", className, onSearch=defaultOnSearch}
 
     const [inputValue, setInputValue] = useState("")
 
+    //TODO: Add a feature for the user to clear input.
+    /*
+    When the user clears do that action, provide a callback function from the parent
+    in response to that action.
+    */
+
     const inputChecker = () => {
         if(inputValue === ""){
             alert("No empty input allowed")
