@@ -22,7 +22,7 @@
 }
 
 .page-num{
-    background-color: var(--color-secondary);
+    background-color: var(--color-sub);
     box-shadow: 1px 1px 7px -2px var(--color-dark);
     border-radius: 5px;
     text-align: center;

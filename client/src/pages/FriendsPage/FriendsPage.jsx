@@ -9,8 +9,10 @@ import "./FriendsPage_master.scss"
 import FriendHolder from '../../components/FriendHolder/FriendHolder'
 import SearchInput from '../../components/SearchInput/SearchInput'
 import EmptyBanner from '../../components/EmptyBanner'
+import Pagination from '../../components/Pagination/Pagination'
 
 import customAxios from '../../utilities/customAxios'
+import usePagination from '../../utilities/hooks/usePagination'
 
 const PAGE = {
 	FRIENDS: "friends",
@@ -21,8 +23,10 @@ const FriendsPage = () => {
 
 	const [page, setPage] = useState(PAGE.FRIENDS)
 	const [discoverFriends, setDiscoverFriends] = useState(null)
+	const discoverPaginator = usePagination(discoverFriends, 50)
 
 	const userSelector = useSelector((state) => state.user)
+	const friendPaginator = usePagination(userSelector.friendsList, 50)
 
 	const handleUsersSearch = (keyword) => {
 
@@ -86,7 +90,7 @@ const FriendsPage = () => {
 					<SearchInput placeholder="Search your friend!"/>
 					<div className="users-container">
 						{userSelector.friendsList.length > 0 ?
-							userSelector.friendsList.map((friend) => (
+							friendPaginator.paginatedItems.map((friend) => (
 								<FriendHolder key={uuid()} user={friend}/>
 							))
 						:
@@ -96,6 +100,7 @@ const FriendsPage = () => {
 							</EmptyBanner>
 						}
 					</div>
+					<Pagination paginator={friendPaginator} itemsLength={userSelector.friendsList.length}/>
 				</div>
 				</>
 				:
@@ -105,7 +110,7 @@ const FriendsPage = () => {
 					{discoverFriends !== null &&(
 						discoverFriends.length > 0 ?
 						<div className="users-container">
-							{discoverFriends.map((user) => (
+							{discoverPaginator.paginatedItems?.map((user) => (
 								<FriendHolder key={uuid()} user={user}/>
 							))}
 						</div>
@@ -115,6 +120,7 @@ const FriendsPage = () => {
 							<p>Try to look for another username</p>
 						</EmptyBanner>
 					)}
+					<Pagination paginator={discoverPaginator} itemsLength={discoverFriends?.length}/>
 				</div>
 				</>
 			}

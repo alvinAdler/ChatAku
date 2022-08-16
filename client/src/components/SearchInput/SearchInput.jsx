@@ -6,7 +6,11 @@ import "./SearchInput_master.scss"
 import FormInput from "../FormInput"
 import DefaultButton from '../Buttons'
 
-const SearchInput = ({placeholder="Search", className, onSearch}) => {
+const defaultOnSearch = () => {
+    console.warn("No search callback provided")
+}
+
+const SearchInput = ({placeholder="Search", className, onSearch=defaultOnSearch}) => {
 
     const [inputValue, setInputValue] = useState("")
 
@@ -15,7 +19,7 @@ const SearchInput = ({placeholder="Search", className, onSearch}) => {
             <FormInput value={inputValue} placeholder={placeholder}
             onChange={(ev) => setInputValue(ev.target.value)}
             />
-            <DefaultButton onClick={() => onSearch(inputValue)}><FaSearch/></DefaultButton>
+            <DefaultButton type="button" onClick={() => onSearch(inputValue)}><FaSearch/></DefaultButton>
         </div>
     )
 }

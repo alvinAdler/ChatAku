@@ -12,7 +12,7 @@ const AVATAR_MAPPING = {
 	"Avatar5": avatar5,
 }
 
-const getAvatar = (avatarName) => {
+export const getAvatar = (avatarName) => {
     if(!avatarName || !Object.keys(AVATAR_MAPPING).includes(avatarName)) return ""
 
     return AVATAR_MAPPING[avatarName]
@@ -28,11 +28,17 @@ const getAvatar = (avatarName) => {
  * Given an array of objects, filter the array where a property of each object
  * match the given target
  */
-const findOBP = (arr, property, target) => {
+export const findOBP = (arr, property, target) => {
     return arr.filter(item => {
         const regex = new RegExp(`${target}`, "gi")
         return item[property].match(regex) !== null
     })
 }
 
-export { getAvatar, findOBP }
+export const generateArray = (start, end) => {
+    let counter = -1
+    return Array.from(new Array(end - start)).map((_) => {
+        counter += 1
+        return start + counter
+    })
+}
