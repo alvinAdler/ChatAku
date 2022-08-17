@@ -7,6 +7,7 @@
     transition: 250ms all ease-in-out;
     overflow: visible;
     z-index: 50;
+    height: 100vh;
     
     .main-sidebar{
         overflow: hidden;
@@ -23,6 +24,10 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        
+        img{
+            margin-right: auto;
+        }
     }
 
     button, a{
@@ -47,24 +52,24 @@
         }
     }
 
-    img{
-        margin-right: auto;
-    }
-
     button:last-child{
-        cursor: pointer;
         position: absolute;
         top: 50%;
         left: 100%;
         background-color: var(--color-accent);
         padding: 0.5rem;
         border-radius: 0 50% 50% 0;
+        width: auto;
+    }
+
+    .chat-list{
+        overflow-y: auto;
+        height: 100%;
     }
 }
 
 .sidebar-container.open{
-    flex-basis: calc(min(25rem, 90%));
-    width: auto;
+    width: calc(min(25rem, 90%));
     transform: translateX(0);
     transition: 250ms all ease-in-out;
 
