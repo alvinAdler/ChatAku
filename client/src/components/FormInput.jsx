@@ -109,6 +109,10 @@ const LabeledPasswordInput = ({ label, id, ...rest }) => {
 	)
 }
 
-export { LabeledFormInput, PasswordInput, LabeledPasswordInput }
+const RoundedInput = styled(FormInput)`
+	border-radius: 999px;
+`
+
+export { LabeledFormInput, PasswordInput, LabeledPasswordInput, RoundedInput }
 
 export default FormInput

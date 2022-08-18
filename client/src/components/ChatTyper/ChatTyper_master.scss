@@ -1,0 +1,33 @@
+.chat-typer-container{
+    // border: 3px solid green;
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input{
+        flex-grow: 1;
+    }
+
+    button{
+        background: none;
+        border: none;
+        outline: 2px solid transparent;
+        font-size: 2rem;
+        color: var(--color-accent);
+        transition: 150ms all ease-in-out;
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+
+        &:hover, &:focus{
+            color: var(--color-sub);
+        }
+
+        &:focus{
+            outline-color: var(--color-accent);
+        }
+    }
+}
