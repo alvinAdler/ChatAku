@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import "./Sidebar_master.scss"
 
-import ChatHolder from '../ChatHolder/ChatHolder'
+import ContactHolder from '../ContactHolder/ContactHolder'
 
 const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 
@@ -25,9 +25,9 @@ const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 					<Link to="/friends"><FiUser/></Link>
 				</header>
 				<div className="chat-list">
-					<ChatHolder/>
-					<ChatHolder/>
-					<ChatHolder/>
+					<ContactHolder/>
+					<ContactHolder/>
+					<ContactHolder/>
 				</div>
 			</div>
 			<button type="button" onClick={toggleSidebarVis}><FiMenu/></button>

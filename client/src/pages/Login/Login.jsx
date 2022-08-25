@@ -29,7 +29,6 @@ const Login = () => {
 		.then((res) => {
 			if(res.status === 200){
 				alert("Login successful")
-				console.log(res)
 				Cookies.set("authToken", res.data.authToken)
 				setUserInfo({
 					username: "",

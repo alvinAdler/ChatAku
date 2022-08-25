@@ -15,6 +15,20 @@
     })
 }
 
+const generateHsl = () => {
+    const hueNum = randomInt(0, 360)
+    const satNum = randomInt(20, 70)
+    const lightNum = randomInt(20, 60)
+
+    return({
+        hueNum, satNum, lightNum
+    })
+}
+
+const randomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
 module.exports = {
-    findOBP
+    findOBP, randomInt, generateHsl
 }

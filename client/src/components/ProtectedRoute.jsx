@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 
 import LoadingScreen from './LoadingScreen/LoadingScreen'
 import customAxios from '../utilities/customAxios'
-import { setFriendsList, setRequestList } from "../utilities/reducers/user"
+import { setFriendsList, setRequestList, setUserInfo } from "../utilities/reducers/user"
 
 const STATES = {
     LOADING: "loading",
@@ -36,7 +36,9 @@ const ProtectedRoute = ({component: Component}) => {
         })
         .then((res) => {
             if(res.status === 200){
+                console.log(res.data)
                 setCurrentState(STATES.ACCEPTED)
+                userDispatcher(setUserInfo({userInfo: res.data.currentUser}))
                 userDispatcher(setFriendsList({friendsList: res.data.friendsList}))
                 userDispatcher(setRequestList({requestList: res.data.requestList}))
             }

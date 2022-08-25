@@ -1,24 +1,28 @@
 .chat-holder-container{
+    // border: 3px solid blue;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    // border: 3px solid red;
-    margin: 0;
-    gap: 1rem;
-    padding-inline: 1rem;
-    padding-block: 0.5rem;
-    border-bottom: 1px solid var(--color-less);
-    cursor: pointer;
+    align-items: flex-start;
+    gap: 0.5rem;
 
     img{
-        width: 5rem;
+        width: 4rem;
     }
 
-    p{
-        margin: 0;
-        // border: 3px solid green;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
+    .chat-content{
+        padding: 0.5em;
+        // flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border-radius: 10px;
+        background-color: var(--color-light);
+
+        *{
+            margin: 0;
+        }
+
+        p:first-child{
+            font-weight: 500;
+        }
     }
 }

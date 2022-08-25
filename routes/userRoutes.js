@@ -7,6 +7,8 @@ const UserModel = require("../models/UserModel")
 
 const tokenVerif = require("../middlewares/tokenVerif")
 
+const { generateHsl } = require("../utilityFunctions")
+
 const SALT_ROUND = 10
 const ALLOWED_REQUEST_METHOD = {
     REJECT: "REJECT",
@@ -16,6 +18,7 @@ const ALLOWED_REQUEST_METHOD = {
 router.post("/register", async (req, res) => {
 
     const { avatarName, firstName, lastName, username, password } = req.body
+    const chatColor = generateHsl()
 
     if(!avatarName || !firstName || !lastName || !username || !password){
         return res.status(400).json({
@@ -42,7 +45,7 @@ router.post("/register", async (req, res) => {
     }
 
     try{
-        const result = await UserModel.create({avatarName, firstName, lastName, username, password: hashedPassword})
+        const result = await UserModel.create({avatarName, firstName, lastName, username, chatColor, password: hashedPassword})
 
         return res.status(200).json({
             message: "Successfully registered user",
@@ -340,7 +343,7 @@ router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
 
 router.post("/tokenChecker", tokenVerif, async (req, res) => {
 
-    const currentUser = await UserModel.findOne({_id: req.user._id}, "friendsList requestList").populate({
+    const currentUser = await UserModel.findOne({_id: req.user._id}, {_id: 0, password: 0, chatList: 0}).populate({
         path: "friendsList",
         select: "username firstName lastName avatarName"
     }).populate({
@@ -364,7 +367,8 @@ router.post("/tokenChecker", tokenVerif, async (req, res) => {
 
     return res.status(200).json({
         message: "User is authenticated",
-        friendsList, requestList
+        friendsList, requestList,
+        currentUser
     })
 })
 

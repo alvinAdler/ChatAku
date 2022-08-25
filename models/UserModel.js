@@ -22,6 +22,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    chatColor: {
+        type: Object,
+        required: true
+    },
     friendsList: {
         type: [mongoose.ObjectId],
         required: true,

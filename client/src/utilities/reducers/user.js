@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const userSlice = createSlice({
     name: "user",
     initialState: {
+        info: {},
         friendsList: [],
         requestList: [],
     },
@@ -46,6 +47,11 @@ const userSlice = createSlice({
             const { requestList } = action.payload
 
             user.requestList = requestList
+        },
+        setUserInfo: (user, action) => {
+            const { userInfo } = action.payload
+
+            user.info = userInfo
         }
     }
 })
@@ -54,6 +60,6 @@ const { actions, reducer } = userSlice
 
 export const { 
     modifyFriendsList, modifyRequestList,
-    setFriendsList, setRequestList
+    setFriendsList, setRequestList, setUserInfo
 } = actions
 export default reducer
