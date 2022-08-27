@@ -19,22 +19,11 @@ const userSlice = createSlice({
                 case "REMOVE":
                     user.friendsList = user.friendsList.filter((user) => user._id !== targetUser._id)
                     break;
-                default:
-                    console.error("Action is not valid")
             }
         },
 
         modifyRequestList: (user, action) => {
-            const { targetUser, actionType } = action.payload
 
-            switch(actionType){
-                case "ADD":
-                    user.requestList.push(targetUser)
-                    break;
-                case "REMOVE":
-                    user.requestList = user.requestList.filter((user) => user._id !== targetUser._id)
-                    break;
-            }
         },
 
         setFriendsList: (user, action) => {
