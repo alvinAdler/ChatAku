@@ -1,0 +1,55 @@
+.chat-contact-selector{
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    transition: 150ms all ease-in-out;
+    inset: 0;
+    z-index: 50;
+    isolation: isolate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.active{
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .main-content{
+        --padding: 0.5rem;
+
+        z-index: 152;
+        border: 1px solid var(--color-less);
+        background-color: var(--color-primary);
+        width: calc(min(30rem, 90%));
+        height: calc(min(40rem, 90%));
+        // max-height: 20rem;
+        padding: var(--padding);
+        overflow: auto;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border: 3px solid red;
+
+        .friend-search{
+            margin-bottom: 1rem;
+        }
+
+        .add-button{
+            margin-left: auto;
+            position: sticky;
+            bottom: var(--padding);
+            right: var(--padding);
+        }
+
+        .row-holder{
+            display: flex;
+            align-items: center;
+
+            div:last-child{
+                flex-grow: 1;
+            }
+        }
+    }
+}

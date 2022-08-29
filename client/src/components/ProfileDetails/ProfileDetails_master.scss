@@ -34,13 +34,6 @@
         }
     }
 
-    .black-banner{
-        position: absolute;
-        inset: 0;
-        z-index: 151;
-        background-color: var(--color-dark-dim);
-    }
-
     &.open{
         visibility: visible;
         opacity: 1;

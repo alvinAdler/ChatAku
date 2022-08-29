@@ -38,7 +38,7 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		//When there is a change in `messagesList`, scroll to the latest chat
-		chatBody.current.scrollTop = chatBody.current.scrollHeight
+		chatBody.current.scrollTop = chatBody.current?.scrollHeight
 	}, [messagesList])
 
 	const handleMessageSend = (ev, message) => {

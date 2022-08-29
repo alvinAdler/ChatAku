@@ -37,6 +37,10 @@ const SuccessButton = styled(DefaultButton)`
     }
 `
 
+const RoundedButton = styled(DefaultButton)`
+    border-radius: 50%;
+`
+
 export default DefaultButton
 
-export { DeclineButton, SuccessButton }
+export { DeclineButton, SuccessButton, RoundedButton }

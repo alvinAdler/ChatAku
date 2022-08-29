@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { v4 as uuid } from 'uuid'
@@ -31,6 +31,10 @@ const FriendsPage = () => {
 	const [searchedFriends, setSearchedFriends] = useState(userSelector.friendsList)
 
 	const friendPaginator = usePagination(searchedFriends, 50)
+
+	useEffect(() => {
+		setSearchedFriends(userSelector.friendsList)
+	}, [userSelector.friendsList])
 
 	const handleUsersSearch = (keyword) => {
 		customAxios({

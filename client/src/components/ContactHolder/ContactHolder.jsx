@@ -2,11 +2,23 @@ import "./ContactHolder_master.scss"
 
 import AvatarHolder from '../AvatarHolder/AvatarHolder'
 
-const ContactHolder = () => {
+const DUMMY_USER = {
+	avatarName: "Avatar2",
+	firstName: "Johny",
+	lastName: "Black",
+	username: "johnyblack",
+    chatColor: {
+        hueNum: 208,
+        satNum: 100,
+        lightNum: 50
+    }
+}
+
+const ContactHolder = ({ user=DUMMY_USER, ...others }) => {
     return (
-        <div className="contact-holder-container">
-            <AvatarHolder avatarName="Avatar1"/>
-            <p>A very very very very long chat name A very very very very long chat name A very very very very long chat name A very very very very long chat name</p>
+        <div className="contact-holder-container" {...others}>
+            <AvatarHolder avatarName={user.avatarName}/>
+            <p>{user.username}</p>
         </div>
     )
 }

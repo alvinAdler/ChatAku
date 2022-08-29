@@ -1,13 +1,18 @@
 import Cookies from 'js-cookie'
+import { useDispatch } from 'react-redux'
 
 import "./ProfileDetails_master.scss"
 
 import AvatarHolder from "../AvatarHolder/AvatarHolder"
 import DefaultButton, { DeclineButton, SuccessButton } from '../Buttons'
+import BlackBanner from '../BlackBanner'
 
+import { modifyRequestList, modifyFriendsList } from '../../utilities/reducers/user'
 import customAxios from '../../utilities/customAxios'
 
 const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
+
+	const userDispatcher = useDispatch()
 
 	const determineActionButton = () => {
 		switch(userInfo.status){
@@ -38,6 +43,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 		})
 		.then((res) => {
 			if(res.status === 200){
+				userDispatcher(modifyFriendsList({actionType: "REMOVE", targetUser: userInfo}))
 				alert("User has been removed from friend list")
 				onDetailToggle()
 			}
@@ -63,6 +69,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 		})
 		.then((res) => {
 			if(res.status === 200){
+				userDispatcher(modifyRequestList({actionType: "REMOVE", targetUser: userInfo}))
 				alert("Friend request has been sent")
 				onDetailToggle()
 			}
@@ -96,6 +103,17 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 		})
 		.then((res) => {
 			if(res.status === 200){
+
+				switch(action.toUpperCase()){
+					case "ACCEPT":
+						userDispatcher(modifyRequestList({actionType: "REMOVE", targetUser: userInfo}))
+						userDispatcher(modifyFriendsList({actionType: "ADD", targetUser: userInfo}))
+						break;
+					case "REJECT":
+						userDispatcher(modifyRequestList({actionType: "REMOVE", targetUser: userInfo}))
+						break;
+				}
+
 				alert("Friend request has been accepted")
 				onDetailToggle()
 			}
@@ -118,7 +136,7 @@ const ProfileDetails = ({userInfo, isDetailVisible, onDetailToggle}) => {
 				
 				{determineActionButton()}
 			</div>
-			<div className="black-banner" onClick={onDetailToggle}></div>
+			<BlackBanner onClick={onDetailToggle}/>
 		</div>
 	)
 }
