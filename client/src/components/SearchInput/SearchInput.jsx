@@ -20,7 +20,10 @@ const SearchInput = ({placeholder="Search", className, onSearch=defaultOnSearch}
     in response to that action.
     */
 
-    const inputChecker = () => {
+    const inputChecker = (ev) => {
+
+        ev.preventDefault()
+
         if(inputValue === ""){
             alert("No empty input allowed")
             return
@@ -30,12 +33,12 @@ const SearchInput = ({placeholder="Search", className, onSearch=defaultOnSearch}
     }
 
     return (
-        <div className={`search-input-container ${className}`}>
+        <form className={`search-input-container ${className}`} onSubmit={inputChecker}>
             <FormInput value={inputValue} placeholder={placeholder}
             onChange={(ev) => setInputValue(ev.target.value)}
             />
-            <DefaultButton type="button" onClick={inputChecker}><FaSearch/></DefaultButton>
-        </div>
+            <DefaultButton type="submit"><FaSearch/></DefaultButton>
+        </form>
     )
 }
 
