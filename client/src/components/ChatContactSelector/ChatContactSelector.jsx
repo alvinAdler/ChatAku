@@ -38,7 +38,7 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
     }
 
     const handleContactSearch = (keyword) => {
-
+        
     }
 
     return (
