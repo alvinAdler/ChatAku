@@ -21,7 +21,11 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
     }))
 
     const handleChatCreation = () => {
-        onCloseChatAdder()
+        // onCloseChatAdder()
+
+        const targetedFriends = focusedFriend.filter((friend) => friend.isSelected)
+
+        console.log(targetedFriends)
     }
 
     const handleContactSelect = (friendId) => {
@@ -38,7 +42,7 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
     }
 
     const handleContactSearch = (keyword) => {
-        
+
     }
 
     return (

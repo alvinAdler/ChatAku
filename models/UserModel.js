@@ -26,6 +26,12 @@ const UserSchema = new Schema({
         type: Object,
         required: true
     },
+    chatList: {
+        type: [mongoose.ObjectId],
+        required: true,
+        default: [],
+        ref: "rooms"
+    },
     friendsList: {
         type: [mongoose.ObjectId],
         required: true,

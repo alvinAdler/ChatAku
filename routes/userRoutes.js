@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const router = express.Router()
 
 const UserModel = require("../models/UserModel")
+const RoomModel = require("../models/RoomModel")
 
 const tokenVerif = require("../middlewares/tokenVerif")
 
@@ -369,6 +370,51 @@ router.post("/tokenChecker", tokenVerif, async (req, res) => {
         message: "User is authenticated",
         friendsList, requestList,
         currentUser
+    })
+})
+
+router.post("/addChat", tokenVerif, async (req, res) => {
+    const { targets } = req.body
+
+    //TODO: Before creating a room, check if a room with the same users already exists.
+
+    //Creating a room
+    let roomCreationRes
+
+    try{
+        roomCreationRes = await RoomModel.create({participants: [...targets.map((target) => target._id), req.user._id]})
+    }catch(err){
+        return res.status(500).json({
+            message: "Failed to create room"
+        })
+    }
+
+    // Do a one-to-one chat
+    if(targets.length === 1){
+        //Adding the current room ID to every participant
+        try{
+            const updateResult = await UserModel.updateMany({_id: {$in: roomCreationRes.participants}}, {$push: {chatList: roomCreationRes._id}})
+            
+            if(updateResult.acknowledged){
+                return res.status(200).json({
+                    message: "Successfully created a room",
+                    room: roomCreationRes
+                })
+            }
+
+            throw new Error("Failed to add room ID to the participants")
+        }
+        catch(err){
+            console.error(err)
+            return res.status(500).json({
+                message: "Failed to add room ID's to the participants",
+                err: `${err}`
+            })
+        }
+    }
+
+    return res.status(200).json({
+        message: "Fallback"
     })
 })
 
