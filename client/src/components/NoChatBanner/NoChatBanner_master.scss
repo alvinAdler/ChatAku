@@ -1,0 +1,13 @@
+.nochat-banner-container{
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    text-align: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    svg{
+        width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+}

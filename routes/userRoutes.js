@@ -344,12 +344,19 @@ router.post("/handleRequestStatus", tokenVerif, async(req, res) => {
 
 router.post("/tokenChecker", tokenVerif, async (req, res) => {
 
-    const currentUser = await UserModel.findOne({_id: req.user._id}, {_id: 0, password: 0, chatList: 0}).populate({
+    const currentUser = await UserModel.findOne({_id: req.user._id}, {_id: 0, password: 0}).populate({
         path: "friendsList",
         select: "username firstName lastName avatarName"
     }).populate({
         path: "requestList",
         select: "username firstName lastName avatarName"
+    })
+    .populate({
+        path: "chatList",
+        populate: {
+            path: "participants",
+            select: "username firstName lastName avatarName"
+        }
     })
 
     const friendsList = currentUser.friendsList.map((friend) => {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { FiLogOut, FiUser, FiMenu } from 'react-icons/fi'
 import { FaPlus } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 
 import "./Sidebar_master.scss"
@@ -10,15 +11,28 @@ import "./Sidebar_master.scss"
 import ContactHolder from '../ContactHolder/ContactHolder'
 import RoundedButton from '../Buttons'
 import ChatContactSelector from '../ChatContactSelector/ChatContactSelector'
+import NoChatBanner from '../NoChatBanner/NoChatBanner'
 
 const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 
 	const [isChatAdderVisible, setIsChatAdderVisible] = useState(false)
 	const navigate = useNavigate()
 
+	const userInfo = useSelector((state) => state.user.info)
+
 	const logout = () => {
 		Cookies.remove("authToken")
 		navigate("/login", {replace: true})
+	}
+
+	const processChat = (chat) => {
+		console.log(chat)
+		if(chat.length === 2){
+			if(chat[0].username === userInfo.username){
+				return chat[1]
+			}
+			return chat[0]
+		}
 	}
 
 	return (
@@ -31,9 +45,13 @@ const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 						<Link to="/friends"><FiUser/></Link>
 					</header>
 					<div className="chat-list">
-						<ContactHolder/>
-						<ContactHolder/>
-						<ContactHolder/>
+						{userInfo.chatList.length > 0 ?
+						userInfo.chatList.map((chat, index) => (
+							<ContactHolder key={index} user={processChat(chat.participants)}/>
+						))
+						:
+						<NoChatBanner/>
+						}
 					</div>
 				</div>
 				<button className="sidebar-toggler" type="button" onClick={toggleSidebarVis}><FiMenu/></button>
