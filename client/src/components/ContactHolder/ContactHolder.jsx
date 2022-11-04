@@ -1,6 +1,9 @@
+import { useDispatch } from "react-redux"
+
 import "./ContactHolder_master.scss"
 
 import AvatarHolder from '../AvatarHolder/AvatarHolder'
+import { setActiveChatId } from "../../utilities/reducers/user"
 
 const DUMMY_USER = {
 	avatarName: "Avatar2",
@@ -14,9 +17,18 @@ const DUMMY_USER = {
     }
 }
 
-const ContactHolder = ({ user=DUMMY_USER, ...others }) => {
+const ContactHolder = ({ user=DUMMY_USER, chatId, ...others }) => {
+
+    const dispatch = useDispatch()
+
+    const handleContactClick = () => {
+        if(!chatId) return
+
+        dispatch(setActiveChatId({chatId}))
+    }
+
     return (
-        <div className="contact-holder-container" {...others}>
+        <div className="contact-holder-container" onClick={handleContactClick} {...others}>
             <AvatarHolder avatarName={user.avatarName}/>
             <p>{user.username}</p>
         </div>

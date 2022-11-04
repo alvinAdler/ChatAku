@@ -26,7 +26,6 @@ const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 	}
 
 	const processChat = (chat) => {
-		console.log(chat)
 		if(chat.length === 2){
 			if(chat[0].username === userInfo.username){
 				return chat[1]
@@ -46,11 +45,11 @@ const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 					</header>
 					<div className="chat-list">
 						{userInfo.chatList.length > 0 ?
-						userInfo.chatList.map((chat, index) => (
-							<ContactHolder key={index} user={processChat(chat.participants)}/>
-						))
+							userInfo.chatList.map((chat, index) => (
+								<ContactHolder key={index} user={processChat(chat.participants)} chatId={chat._id}/>
+							))
 						:
-						<NoChatBanner/>
+							<NoChatBanner/>
 						}
 					</div>
 				</div>

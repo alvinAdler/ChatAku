@@ -3,10 +3,24 @@ require("dotenv").config()
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
+const { Server } = require("socket.io")
+const { createServer } = require("http")
 
 const userRouter = require("./routes/userRoutes")
+const RoomModel = require("./models/RoomModel")
 
 const app = express()
+const httpServer = createServer(app)
+
+const io = new Server(httpServer, {
+    cors: ["http://localhost:3000"]
+})
+
+io.on("connection", (socket) => {
+    console.log("Connected to socket")
+    console.log(socket.id)
+    console.log("===============")
+})
 
 app.use(express.json())
 app.use(cors())
@@ -19,6 +33,6 @@ db.once("open", () => console.log("Connected to the database"))
 
 app.use("/users", userRouter)
 
-app.listen(process.env.PORT_NUMBER, () => {
+httpServer.listen(process.env.PORT_NUMBER, () => {
     console.log(`Server started on port ${process.env.PORT_NUMBER}`)
 })

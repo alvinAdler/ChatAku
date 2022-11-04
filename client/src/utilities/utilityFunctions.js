@@ -42,3 +42,11 @@ export const generateArray = (start, end) => {
         return start + counter
     })
 }
+
+export const findChatOpponent = (activeChat, currentUsername) => {
+    if(!activeChat) return
+    for(let participant of activeChat.participants){
+        if(participant.username !== currentUsername) return participant
+    }
+    return
+}

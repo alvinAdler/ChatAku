@@ -1,9 +1,12 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { v4 as uuid } from 'uuid'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { io } from 'socket.io-client'
 
 import "./Dashboard_master.scss"
 
+import { findChatOpponent } from "../../utilities/utilityFunctions"
+import { pushChat } from "../../utilities/reducers/user"
 import Sidebar from "../../components/Sidebar/Sidebar"
 import ChatStarter from "../../components/ChatStarter/ChatStarter"
 import ChatTyper from "../../components/ChatTyper/ChatTyper"
@@ -24,32 +27,34 @@ const DUMMY_USER = {
 const Dashboard = () => {
 
 	const [isSidebarVisible, setIsSidebarVisible] = useState(true)
-	const [messagesList, setMessagesList] = useState([])
+	const [activeChat, setActiveChat] = useState(undefined)
 
 	const chatBody = useRef()
 
-	const userInfo = useSelector((state) => state.user.info)
-
-	useEffect(() => {
-		const holderObj = {user: DUMMY_USER, message: "A sample text from the user. A sample text from the user. A sample text from the user. A sample text from the user. A sample text from the user."}
-		const diffObj = {user: {...DUMMY_USER, username: "Changes"}, message: "A different message"}
-		setMessagesList([holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, holderObj, diffObj])
-	}, [])
+	const user = useSelector((state) => state.user)
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		//When there is a change in `messagesList`, scroll to the latest chat
-		chatBody.current.scrollTop = chatBody.current?.scrollHeight
-	}, [messagesList])
+		if(chatBody.current) chatBody.current.scrollTop = chatBody.current?.scrollHeight
+	}, [activeChat?.chatHistory])
+
+	useEffect(() => {
+		if(user.activeChatId === "") return
+		setActiveChat(user.info.chatList.find((chat) => chat._id === user.activeChatId))
+	}, [user.activeChatId])
 
 	const handleMessageSend = (ev, message) => {
 		ev.preventDefault()
 		
 		const tempHolder = {
-			user: userInfo,
-			message: message
+			user: user.info,
+			message: message,
+			chatId: user.activeChatId
 		}
 
-		setMessagesList((prevList) => [...prevList, tempHolder])
+		console.log(tempHolder)
+
 	}
 
 	return (
@@ -60,21 +65,25 @@ const Dashboard = () => {
 			}}
 			/>
 			<div className="main-chat">
-				<ChatStarter isVisible={false}/>
+				<ChatStarter isVisible={user.activeChatId === ""}/>
 
-				<div className="chat-header">
-					<h1>A Cool Chat</h1>
-				</div>
-				<div className="chat-body" ref={chatBody}>
-					<div className="chats-container">
-						{messagesList.map((chat) => (
-							<ChatHolder key={uuid()} user={chat.user} message={chat.message}/>
-						))}
+				{user.activeChatId !== "" &&
+				<>
+					<div className="chat-header">
+						<h1>{findChatOpponent(activeChat, user.info.username)?.username}</h1>
 					</div>
-				</div>
-				<div className="message-typer">
-					<ChatTyper onSend={handleMessageSend}/>
-				</div>
+					<div className="chat-body" ref={chatBody}>
+						<div className="chats-container">
+							{activeChat?.chatHistory.map((chat) => (
+								<ChatHolder key={uuid()} user={chat.user} message={chat.message}/>
+							))}
+						</div>
+					</div>
+					<div className="message-typer">
+						<ChatTyper onSend={handleMessageSend}/>
+					</div>
+				</>
+				}
 			</div>
 		</div>
 	)
