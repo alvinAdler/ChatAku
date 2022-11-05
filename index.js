@@ -20,6 +20,25 @@ io.on("connection", (socket) => {
     console.log("Connected to socket")
     console.log(socket.id)
     console.log("===============")
+
+
+    socket.on("send-message", (data) => {
+        RoomModel.updateOne({_id: data.chatId}, {$push: {chatHistory: {user: data.user, message: data.message}}})
+        .then((res) => {
+            if(res.acknowledged){
+                io.emit("receive-message", data)
+            }
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+    })
+
+    socket.on("disconnect", () => {
+        console.log("A user is disconeccted")
+        console.log(socket.id)
+        console.log("-------------")
+    })
 })
 
 app.use(express.json())

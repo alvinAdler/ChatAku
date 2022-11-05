@@ -372,11 +372,15 @@ router.post("/tokenChecker", tokenVerif, async (req, res) => {
 
         return tempUser
     })
+    
+    const newUser = currentUser.toObject()
+    delete newUser.friendsList
+    delete newUser.requestList
 
     return res.status(200).json({
         message: "User is authenticated",
         friendsList, requestList,
-        currentUser
+        currentUser: newUser
     })
 })
 

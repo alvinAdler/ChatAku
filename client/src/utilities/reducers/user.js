@@ -65,12 +65,9 @@ const userSlice = createSlice({
             const targetedDataIndex = user.info.chatList.indexOf(user.info.chatList.find(chat => chat._id === user.activeChatId))
             if(targetedDataIndex === -1) return
 
-            console.log(targetedDataIndex)
-            console.log(data)
-            console.log(action)
-            console.log(user.activeChatId)
-
             user.info.chatList[targetedDataIndex].chatHistory.push(data)
+            console.log(user.info.chatList[0].chatHistory.length)
+            return user
         }
     }
 })

@@ -6,15 +6,18 @@ import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { BrowserRouter } from "react-router-dom"
 
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
 import userReducer from './utilities/reducers/user'
+import socketReducer from './utilities/reducers/socket'
 
 const reduxStore = configureStore({
 	reducer: {
-		user: userReducer
-	}
+		user: userReducer,
+		socket: socketReducer
+	},
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false})
 })
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
