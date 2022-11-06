@@ -393,7 +393,10 @@ router.post("/addChat", tokenVerif, async (req, res) => {
     let roomCreationRes
 
     try{
-        roomCreationRes = await RoomModel.create({participants: [...targets.map((target) => target._id), req.user._id]})
+        roomCreationRes = await (await RoomModel.create({participants: [...targets.map((target) => target._id), req.user._id]})).populate({
+            path: "participants",
+            select: "_id username firstName lastName avatarName chatColor"
+        })
     }catch(err){
         return res.status(500).json({
             message: "Failed to create room"

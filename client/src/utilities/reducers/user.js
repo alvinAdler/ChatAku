@@ -66,7 +66,12 @@ const userSlice = createSlice({
             if(targetedDataIndex === -1) return
 
             user.info.chatList[targetedDataIndex].chatHistory.push(data)
-            console.log(user.info.chatList[0].chatHistory.length)
+            return user
+        },
+        pushChatList: (user, action) => {
+            const { chat } = action.payload
+
+            user.info.chatList.push(chat)
             return user
         }
     }
@@ -76,6 +81,6 @@ const { actions, reducer } = userSlice
 
 export const { 
     modifyFriendsList, modifyRequestList,
-    setFriendsList, setRequestList, setUserInfo, setActiveChatId, pushChat
+    setFriendsList, setRequestList, setUserInfo, setActiveChatId, pushChat, pushChatList
 } = actions
 export default reducer

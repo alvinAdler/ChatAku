@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid'
 import { FaCheck } from 'react-icons/fa'
+import Cookies from 'js-cookie'
 
 import "./ChatContactSelector_master.scss"
+
+import customAxios from '../../utilities/customAxios'
+import { pushChatList } from '../../utilities/reducers/user'
 
 import SearchInput from '../SearchInput/SearchInput'
 import BlackBanner from '../BlackBanner'
@@ -20,12 +24,36 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
         return newFriend
     }))
 
+    const dispatch = useDispatch()
+
     const handleChatCreation = () => {
-        // onCloseChatAdder()
 
-        const targetedFriends = focusedFriend.filter((friend) => friend.isSelected)
+        const targetedFriends = focusedFriend.filter((friend) => friend.isSelected).map((friend) => {
+            const {isSelected, ...rest} = friend
+            return rest
+        })
 
-        console.log(targetedFriends)
+        customAxios({
+            method: "POST",
+            url: "/users/addChat",
+            headers: {
+                "Authorization": `Bearer ${Cookies.get("authToken")}`
+            },
+            data: {
+                targets: targetedFriends
+            }
+        })
+        .then((res) => {
+            if(res.status !== 200 && res.status !== 201) return
+
+            dispatch(pushChatList({chat: res.data.room}))
+        })
+        .catch((err) => {
+            console.error(err)
+        })
+        .finally(() => {
+            onCloseChatAdder()
+        })
     }
 
     const handleContactSelect = (friendId) => {
