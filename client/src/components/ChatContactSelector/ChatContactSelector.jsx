@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid'
 import { FaCheck } from 'react-icons/fa'
@@ -18,13 +18,35 @@ import Checkbox from '../Checkbox/Checkbox'
 const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
 
     const friendsList = useSelector((store) => store.user.friendsList)
-    const [focusedFriend, setFocusedFriend] = useState(friendsList.map((friend) => {
+    const chatList = useSelector((store) => store.user.info.chatList)
+
+    const [focusedFriend, setFocusedFriend] = useState(friendsList.filter((friend) => {
+        for(let chat of chatList){
+            const sample = chat.participants.find((item) => item._id === friend._id)
+            if(sample !== undefined) return false
+        }
+        return true
+    }).map((friend) => {
         const newFriend = {...friend}
         newFriend.isSelected = false
         return newFriend
     }))
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        setFocusedFriend((prevState) => prevState.filter((friend) => {
+            for(let chat of chatList){
+                const sample = chat.participants.find((item) => item._id === friend._id)
+                if(sample !== undefined) return false
+            }
+            return true
+        }).map((friend) => {
+            const newFriend = {...friend}
+            newFriend.isSelected = false
+            return newFriend
+        }))
+    }, [chatList])
 
     const handleChatCreation = () => {
 
@@ -50,6 +72,11 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
         })
         .catch((err) => {
             console.error(err)
+            setFocusedFriend((prevState) => prevState.map((item) => {
+                const newFriend = {...item}
+                newFriend.isSelected = false
+                return newFriend
+            }))
         })
         .finally(() => {
             onCloseChatAdder()
