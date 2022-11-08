@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import "./ContactHolder_master.scss"
 
@@ -20,10 +20,13 @@ const DUMMY_USER = {
 const ContactHolder = ({ user=DUMMY_USER, chatId, ...others }) => {
 
     const dispatch = useDispatch()
+    const socket = useSelector((state) => state.socket.socket)
+    const prevChatId = useSelector((store) => store.user.activeChatId)
 
     const handleContactClick = () => {
         if(!chatId) return
 
+        socket.emit("join-room", {chatId, prevChatId})
         dispatch(setActiveChatId({chatId}))
     }
 

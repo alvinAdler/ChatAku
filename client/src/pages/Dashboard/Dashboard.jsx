@@ -52,6 +52,7 @@ const Dashboard = () => {
 		console.log(tempHolder)
 
 		socket.emit("send-message", tempHolder)
+		dispatch(pushChat({data: tempHolder}))
 	}
 
 	return (

@@ -26,12 +26,20 @@ io.on("connection", (socket) => {
         RoomModel.updateOne({_id: data.chatId}, {$push: {chatHistory: {user: data.user, message: data.message}}})
         .then((res) => {
             if(res.acknowledged){
-                io.emit("receive-message", data)
+                socket.to(data.chatId).emit("receive-message", data)
+                // socket.emit("receive-message", data)
             }
         })
         .catch((err) => {
             console.error(err)
         })
+    })
+
+    socket.on("join-room", (data) => {
+        const {chatId, prevChatId} = data
+        console.log(`${new Date()}: Join to room -> ${chatId}`)
+        socket.leave(prevChatId)
+        socket.join(chatId)
     })
 
     socket.on("disconnect", () => {
