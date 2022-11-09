@@ -1,11 +1,15 @@
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef } from "react"
 import { v4 as uuid } from 'uuid'
 import { useSelector, useDispatch } from 'react-redux'
+import Cookies from "js-cookie"
 
 import "./Dashboard_master.scss"
 
 import { findChatOpponent } from "../../utilities/utilityFunctions"
 import { pushChat } from "../../utilities/reducers/user"
+import customAxios from "../../utilities/customAxios"
+
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen'
 import Sidebar from "../../components/Sidebar/Sidebar"
 import ChatStarter from "../../components/ChatStarter/ChatStarter"
 import ChatTyper from "../../components/ChatTyper/ChatTyper"
@@ -14,6 +18,8 @@ import ChatHolder from '../../components/ChatHolder/ChatHolder'
 const Dashboard = () => {
 
 	const [isSidebarVisible, setIsSidebarVisible] = useState(true)
+	const [activeChat, setActiveChat] = useState(undefined)
+	const [isFetchingChat, setIsFetchingChat] = useState(false)
 
 	const chatBody = useRef()
 
@@ -21,16 +27,41 @@ const Dashboard = () => {
 	const dispatch = useDispatch()
 	const socket = useSelector((state) => state.socket.socket)
 
-	const activeChat = useMemo(() => {
-		if(user.activeChatId === "") return
-		return user.info.chatList.find((chat) => chat._id === user.activeChatId)	
-	}, [user.activeChatId, user.info.chatList.find((chat) => chat._id === user.activeChatId)?.chatHistory])
+	const authToken = Cookies.get("authToken")
 
 	useEffect(() => {
 		socket.on("receive-message", (data) => {
 			dispatch(pushChat({data}))
 		})
 	}, [])
+
+	useEffect(() => {
+		if(user.activeChatId === "") return
+
+		setIsFetchingChat(true)
+
+		customAxios({
+			method: "GET",
+			url: `/users/getChat/${user.activeChatId}`,
+			headers: {
+				"Authorization": `Bearer ${authToken}`
+			}
+		})
+		.then((res) => {
+			setActiveChat(res.data.chat)
+			console.log(res.data)
+		})
+		.catch((err) => {
+			console.error(err)
+		})
+		.finally(() => {
+			setIsFetchingChat(false)
+		})
+	}, [user.activeChatId])
+
+	useEffect(() => {
+		setActiveChat(user.info.chatList.find((chat) => chat._id === user.activeChatId))
+	}, [user.info.chatList.find((chat) => chat._id === user.activeChatId)?.chatHistory])
 
 	useEffect(() => {
 		//When there is a change in `messagesList`, scroll to the latest chat
@@ -48,8 +79,6 @@ const Dashboard = () => {
 			message: message,
 			chatId: user.activeChatId
 		}
-
-		console.log(tempHolder)
 
 		socket.emit("send-message", tempHolder)
 		dispatch(pushChat({data: tempHolder}))
@@ -83,6 +112,7 @@ const Dashboard = () => {
 				</>
 				}
 			</div>
+			<LoadingScreen message="Fetching chats" isVisible={isFetchingChat}/>
 		</div>
 	)
 }

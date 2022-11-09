@@ -432,4 +432,27 @@ router.post("/addChat", tokenVerif, async (req, res) => {
     })
 })
 
+router.get("/getChat/:chatId", tokenVerif, async (req, res) => {
+    const { chatId } = req.params
+
+    let result
+
+    try{
+        result = await RoomModel.findOne({_id: chatId}).populate({
+            path: "participants",
+            select: "_id avatarName firstName lastName username chatColor"
+        })
+    }
+    catch(err){
+        console.error(err)
+        return res.status(500).json({
+            message: "Error while finding chat"
+        })
+    }
+
+    return res.status(200).json({
+        chat: result
+    })
+})
+
 module.exports = router
