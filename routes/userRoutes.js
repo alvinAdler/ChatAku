@@ -455,4 +455,35 @@ router.get("/getChat/:chatId", tokenVerif, async (req, res) => {
     })
 })
 
+router.delete("/deleteChat", tokenVerif, async (req, res) => {
+    const { chatId } = req.body
+
+    if(chatId === undefined){
+        return res.status(400).json({
+            message: "Chat ID must be provided"
+        })
+    }
+
+    try{
+        const result = await RoomModel.deleteOne({_id: chatId})
+        const updateResult = await UserModel.updateMany({chatList: chatId}, {$pull: {chatList: chatId}})
+
+        if(result.deletedCount > 0 && updateResult.modifiedCount > 0){
+            return res.status(200).json({
+                message: "Chat has been deleted successfully",
+                chatId
+            })
+        }
+
+    }
+    catch(err){
+        console.error(err)
+        return res.status(500).json({
+            message: "Failed to delete chat",
+            err
+        })
+    }
+
+})
+
 module.exports = router
