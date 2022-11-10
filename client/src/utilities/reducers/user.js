@@ -55,9 +55,10 @@ const userSlice = createSlice({
         setActiveChatId: (user, action) => {
             const { chatId } = action.payload
 
-            if(!chatId) return
+            if(chatId === undefined) return
 
             user.activeChatId = chatId
+            return user
         },
         pushChat: (user, action) => {
             const { data } = action.payload
@@ -73,6 +74,12 @@ const userSlice = createSlice({
 
             user.info.chatList.push(chat)
             return user
+        },
+        deleteChatList: (user, action) => {
+            const { chatId } = action.payload
+
+            user.info.chatList.splice(user.info.chatList.indexOf(user.info.chatList.find((chat) => chat._id === chatId)), 1)
+            return user
         }
     }
 })
@@ -81,6 +88,6 @@ const { actions, reducer } = userSlice
 
 export const { 
     modifyFriendsList, modifyRequestList,
-    setFriendsList, setRequestList, setUserInfo, setActiveChatId, pushChat, pushChatList
+    setFriendsList, setRequestList, setUserInfo, setActiveChatId, pushChat, pushChatList, deleteChatList
 } = actions
 export default reducer

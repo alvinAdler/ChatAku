@@ -18,12 +18,47 @@
         // border: 3px solid blue;
         background-color: var(--color-sub);
         padding: 0.75rem;
+        cursor: pointer;
+        position: relative;
 
         display: flex;
         align-items: center;
 
         h1{
             font-size: var(--fs-h2);
+        }
+    }
+
+    .chat-options{
+        width: 100%;
+        left: 0;
+        border-top: 1px solid var(--color-accent);
+        background-color: var(--color-sub);
+        padding: 0.5rem;
+        translate: 0 -100%;
+        visibility: hidden;
+        opacity: 0;
+        transition: 150ms all ease-in-out;
+        position: absolute;
+        top: 100%;
+
+        & .item{
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            cursor: pointer;
+            transition: 150ms all ease-in-out;
+
+            &:hover{
+                color: var(--color-light);
+            }
+        }
+
+        &.active{
+            visibility: visible;
+            opacity: 1;
+            translate: 0;
         }
     }
 
