@@ -55,18 +55,18 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
         })
         .then((res) => {
             if(res.status !== 200 && res.status !== 201) return
-
+            console.log(res)
             dispatch(pushChatList({chat: res.data.room}))
         })
         .catch((err) => {
             console.error(err)
+        })
+        .finally(() => {
             setFocusedFriend((prevState) => prevState.map((item) => {
                 const newFriend = {...item}
                 newFriend.isSelected = false
                 return newFriend
             }))
-        })
-        .finally(() => {
             onCloseChatAdder()
         })
     }

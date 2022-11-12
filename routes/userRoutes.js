@@ -9,6 +9,7 @@ const RoomModel = require("../models/RoomModel")
 const tokenVerif = require("../middlewares/tokenVerif")
 
 const { generateHsl } = require("../utilityFunctions")
+const { isEqual } = require("lodash")
 
 const SALT_ROUND = 10
 const ALLOWED_REQUEST_METHOD = {
@@ -387,11 +388,21 @@ router.post("/tokenChecker", tokenVerif, async (req, res) => {
 router.post("/addChat", tokenVerif, async (req, res) => {
     const { targets } = req.body
 
-    //TODO: Before creating a room, check if a room with the same users already exists.
+    //Get all the rooms that the current user have
+    const chatList = await UserModel.findOne({_id: req.user._id}, {chatList: 1}).populate({
+        path: "chatList",
+        select: "_id participants"
+    })
 
-    //Creating a room
+    if(chatList.chatList.some((chat) => isEqual(chat.participants.map((userId) => String(userId)), [...targets.map((user) => user._id), req.user._id]))){
+        return res.status(400).json({
+            message: "Chat already exist"
+        })
+    }
+
+
+    // Creating a room
     let roomCreationRes
-
     try{
         roomCreationRes = await (await RoomModel.create({participants: [...targets.map((target) => target._id), req.user._id]})).populate({
             path: "participants",
@@ -477,7 +488,6 @@ router.delete("/deleteChat", tokenVerif, async (req, res) => {
             err
         })
     }
-
 })
 
 module.exports = router
