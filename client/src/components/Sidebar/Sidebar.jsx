@@ -32,6 +32,11 @@ const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 			}
 			return chat[0]
 		}
+
+		return({
+			avatarName: chat[0].avatarName,
+			username: chat.map((item) => item.username).join("-")
+		})
 	}
 
 	return (
@@ -46,7 +51,11 @@ const Sidebar = ({isSidebarVisible, toggleSidebarVis}) => {
 					<div className="chat-list">
 						{userInfo.chatList.length > 0 ?
 							userInfo.chatList.map((chat, index) => (
-								<ContactHolder key={index} user={processChat(chat.participants)} chatId={chat._id}/>
+								<ContactHolder key={index} 
+								chatTitle={processChat(chat.participants).username} 
+								chatAvatar={processChat(chat.participants).avatarName} 
+								chatId={chat._id}
+								/>
 							))
 						:
 							<NoChatBanner/>

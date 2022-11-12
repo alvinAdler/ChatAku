@@ -403,33 +403,27 @@ router.post("/addChat", tokenVerif, async (req, res) => {
         })
     }
 
-    // Do a one-to-one chat
-    if(targets.length === 1){
-        //Adding the current room ID to every participant
-        try{
-            const updateResult = await UserModel.updateMany({_id: {$in: roomCreationRes.participants}}, {$push: {chatList: roomCreationRes._id}})
-            
-            if(updateResult.acknowledged){
-                return res.status(200).json({
-                    message: "Successfully created a room",
-                    room: roomCreationRes
-                })
-            }
-
-            throw new Error("Failed to add room ID to the participants")
-        }
-        catch(err){
-            console.error(err)
-            return res.status(500).json({
-                message: "Failed to add room ID's to the participants",
-                err: `${err}`
+    //Adding the current room ID to every participant
+    try{
+        const updateResult = await UserModel.updateMany({_id: {$in: roomCreationRes.participants}}, {$push: {chatList: roomCreationRes._id}})
+        
+        if(updateResult.acknowledged){
+            return res.status(200).json({
+                message: "Successfully created a room",
+                room: roomCreationRes
             })
         }
+
+        throw new Error("Failed to add room ID to the participants")
+    }
+    catch(err){
+        console.error(err)
+        return res.status(500).json({
+            message: "Failed to add room ID's to the participants",
+            err: `${err}`
+        })
     }
 
-    return res.status(200).json({
-        message: "Fallback"
-    })
 })
 
 router.get("/getChat/:chatId", tokenVerif, async (req, res) => {

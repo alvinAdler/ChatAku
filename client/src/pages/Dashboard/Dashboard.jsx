@@ -51,7 +51,6 @@ const Dashboard = () => {
 		})
 		.then((res) => {
 			setActiveChat(res.data.chat)
-			console.log(res.data)
 		})
 		.catch((err) => {
 			console.error(err)

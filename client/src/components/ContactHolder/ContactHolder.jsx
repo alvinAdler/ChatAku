@@ -17,7 +17,7 @@ const DUMMY_USER = {
     }
 }
 
-const ContactHolder = ({ user=DUMMY_USER, chatId, ...others }) => {
+const ContactHolder = ({ chatTitle, chatAvatar, chatId, ...others }) => {
 
     const dispatch = useDispatch()
     const socket = useSelector((state) => state.socket.socket)
@@ -32,8 +32,8 @@ const ContactHolder = ({ user=DUMMY_USER, chatId, ...others }) => {
 
     return (
         <div className="contact-holder-container" onClick={handleContactClick} {...others}>
-            <AvatarHolder avatarName={user.avatarName}/>
-            <p>{user.username}</p>
+            <AvatarHolder avatarName={chatAvatar}/>
+            <p>{chatTitle}</p>
         </div>
     )
 }

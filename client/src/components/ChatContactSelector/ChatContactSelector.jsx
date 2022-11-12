@@ -20,13 +20,7 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
     const friendsList = useSelector((store) => store.user.friendsList)
     const chatList = useSelector((store) => store.user.info.chatList)
 
-    const [focusedFriend, setFocusedFriend] = useState(friendsList.filter((friend) => {
-        for(let chat of chatList){
-            const sample = chat.participants.find((item) => item._id === friend._id)
-            if(sample !== undefined) return false
-        }
-        return true
-    }).map((friend) => {
+    const [focusedFriend, setFocusedFriend] = useState(friendsList.map((friend) => {
         const newFriend = {...friend}
         newFriend.isSelected = false
         return newFriend
@@ -35,13 +29,7 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setFocusedFriend((prevState) => prevState.filter((friend) => {
-            for(let chat of chatList){
-                const sample = chat.participants.find((item) => item._id === friend._id)
-                if(sample !== undefined) return false
-            }
-            return true
-        }).map((friend) => {
+        setFocusedFriend((prevState) => prevState.map((friend) => {
             const newFriend = {...friend}
             newFriend.isSelected = false
             return newFriend
@@ -108,7 +96,11 @@ const ChatContactSelector = ({ isVisible, onCloseChatAdder }) => {
                 {focusedFriend.map((friend) => (
                     <div className='row-holder' key={uuid()}>
                         <Checkbox checked={friend.isSelected} onChange={() => handleContactSelect(friend._id)}/>
-                        <ContactHolder user={friend} onClick={() => handleContactSelect(friend._id)}/>
+                        <ContactHolder
+                        chatTitle={friend.username}
+                        chatAvatar={friend.avatarName} 
+                        onClick={() => handleContactSelect(friend._id)}
+                        />
                     </div>
                 ))}
 

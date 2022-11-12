@@ -45,8 +45,14 @@ export const generateArray = (start, end) => {
 
 export const findChatOpponent = (activeChat, currentUsername) => {
     if(!activeChat) return
-    for(let participant of activeChat.participants){
-        if(participant.username !== currentUsername) return participant
+
+    if(activeChat.participants.length === 2){
+        for(let participant of activeChat.participants){
+            if(participant.username !== currentUsername) return participant
+        }
+    }else{
+        return({
+            username: activeChat.participants.map((user) => user.username).join("-")
+        })
     }
-    return
 }

@@ -26,6 +26,10 @@
 
         h1{
             font-size: var(--fs-h2);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 80%;
         }
     }
 
